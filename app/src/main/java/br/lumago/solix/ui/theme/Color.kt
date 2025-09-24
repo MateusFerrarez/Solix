@@ -1,0 +1,27 @@
+package br.lumago.solix.ui.theme
+
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+
+val Purple80 = Color(0xFFD0BCFF)
+val PurpleGrey80 = Color(0xFFCCC2DC)
+val Pink80 = Color(0xFFEFB8C8)
+
+val Purple40 = Color(0xFF6650a4)
+val PurpleGrey40 = Color(0xFF625b71)
+val Pink40 = Color(0xFF7D5260)
+
+
+val corBotao = Color(0xFF2B4632)
+val corTexto = Color(0xFF709E7C)
+val corFundoCard = Color(0xFFD9D9D9)
+
+val corGradienteHome1 = Color(0xFFB5FFC9)
+val corGradienteHome2 = Color(0xFF6D9979)
+
+val gradientColorHeader1 = Color(0xFF6AAC7B)
+val gradientColorHeader2 = Color(0xFF2B4632)
+
+val bgHomeBrush = Brush.linearGradient(listOf(corGradienteHome1, corGradienteHome2))
+
+val bgHeaderBrush = Brush.linearGradient(listOf(gradientColorHeader1,gradientColorHeader2))
