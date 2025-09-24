@@ -20,7 +20,7 @@ import androidx.room.PrimaryKey
         ),
         ForeignKey(
             entity = Customers::class,
-            parentColumns = ["indicator_id"],
+            parentColumns = ["customer_id"],
             childColumns = ["indicator_id"]
         )
     ]

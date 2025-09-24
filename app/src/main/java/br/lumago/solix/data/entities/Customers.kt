@@ -29,10 +29,10 @@ data class Customers(
     @ColumnInfo(name = "partner_id") val partnerId: String? = null,
     @ColumnInfo(name = "firebase_id") val firebaseId: String? = null,
     @ColumnInfo(name = "razao_social") val razaoSocial: String,
-    @ColumnInfo(name = "nome_fantasia") val nomeFantasia: String,
+    @ColumnInfo(name = "nome_fantasia") val nomeFantasia: String? = null,
     @ColumnInfo(name = "documento_1") val documento1: String,
-    @ColumnInfo(name = "documento_2") val documento2: String,
-    @ColumnInfo(name = "status") val status: String,
+    @ColumnInfo(name = "documento_2") val documento2: String? = null,
+    @ColumnInfo(name = "status", defaultValue = "O") val status: String = "O",
     @ColumnInfo(name = "created_at") val createdAt: String,
     @ColumnInfo(name = "updated_at") val updatedAt: String? = null,
     @ColumnInfo(name = "synchronized_at") val synchronizedAt: String? = null
