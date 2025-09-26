@@ -43,4 +43,4 @@ fun Login() {
         tint = corBotao,
         modifier = Modifier.size(120.dp)
     )
-    }
+}
