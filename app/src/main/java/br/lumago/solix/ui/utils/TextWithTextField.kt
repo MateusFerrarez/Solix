@@ -3,6 +3,7 @@ package br.lumago.solix.ui.utils
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -13,6 +14,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
+import br.lumago.solix.ui.theme.estiloField
 import br.lumago.solix.ui.theme.titleStyle
 
 @Composable
@@ -43,7 +45,8 @@ fun TextWithTextField(
                     false -> KeyboardType.Text
                 }
             ),
-
+            colors = estiloField(),
+            shape = RoundedCornerShape(60)
         )
     }
 }

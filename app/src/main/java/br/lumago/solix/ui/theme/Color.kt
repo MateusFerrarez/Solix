@@ -1,7 +1,10 @@
 package br.lumago.solix.ui.theme
 
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -32,5 +35,31 @@ val bgHeaderBrush = Brush.linearGradient(listOf(gradientColorHeader1,gradientCol
 fun BotaoCinzaoColor() : ButtonColors{
     return ButtonDefaults.buttonColors(
         containerColor = corFundoCard
+    )
+}
+
+@Composable
+fun estiloField(): TextFieldColors {
+    return TextFieldDefaults.colors(
+        focusedLabelColor = Color.Black,
+        focusedIndicatorColor = Color.Transparent,
+        focusedContainerColor = corFundoCard,
+        focusedTextColor = Color.Black,
+        errorIndicatorColor = Color.Transparent,
+        errorCursorColor = Color.Red,
+        errorContainerColor = Color.White,
+        errorLabelColor = Color.Red,
+        errorLeadingIconColor = Color.Red,
+        errorTrailingIconColor = Color.Red,
+        errorTextColor = Color.Red,
+        cursorColor = Color.Blue,
+        selectionColors = TextSelectionColors(
+            handleColor = Color.Blue,
+            backgroundColor = corTexto.copy(alpha = 0.6f)
+        ),
+        unfocusedLabelColor = Color.Black,
+        unfocusedTextColor = Color.LightGray,
+        unfocusedContainerColor = corFundoCard,
+        unfocusedIndicatorColor = Color.Transparent
     )
 }
