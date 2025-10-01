@@ -29,12 +29,19 @@ val gradientColorHeader2 = Color(0xFF2B4632)
 
 val bgHomeBrush = Brush.linearGradient(listOf(corGradienteHome1, corGradienteHome2))
 
-val bgHeaderBrush = Brush.linearGradient(listOf(gradientColorHeader1,gradientColorHeader2))
+val bgHeaderBrush = Brush.linearGradient(listOf(gradientColorHeader1, gradientColorHeader2))
 
 @Composable
-fun BotaoCinzaoColor() : ButtonColors{
+fun botaoCinzaoColor(): ButtonColors {
     return ButtonDefaults.buttonColors(
         containerColor = corFundoCard
+    )
+}
+
+@Composable
+fun corBotao(): ButtonColors {
+    return ButtonDefaults.buttonColors(
+        containerColor = corBotao
     )
 }
 
@@ -52,9 +59,9 @@ fun estiloField(): TextFieldColors {
         errorLeadingIconColor = Color.Red,
         errorTrailingIconColor = Color.Red,
         errorTextColor = Color.Red,
-        cursorColor = Color.Blue,
+        cursorColor = corTexto,
         selectionColors = TextSelectionColors(
-            handleColor = Color.Blue,
+            handleColor = corTexto,
             backgroundColor = corTexto.copy(alpha = 0.6f)
         ),
         unfocusedLabelColor = Color.Black,

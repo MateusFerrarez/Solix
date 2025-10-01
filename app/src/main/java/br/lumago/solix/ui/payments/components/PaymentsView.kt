@@ -41,7 +41,7 @@ fun PaymentsView() {
             },
             text = "Nova mensalidade",
             modifier = Modifier
-                .padding(5.dp)
+                .padding(10.dp)
                 .align(Alignment.BottomEnd)
         )
     }

@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.lumago.solix.ui.theme.botaoCinzaoColor
@@ -17,11 +16,10 @@ import br.lumago.solix.ui.theme.normalStyle
 import br.lumago.solix.ui.theme.titleStyle
 
 @Composable
-fun TextWithButton(
+fun TextWithDatePicker(
     text: String,
     buttonText: String?,
-    onClick: () -> Unit,
-    widthPercentage: Float
+    onSelectDate: () -> Unit
 ) {
     Column {
         Text(
@@ -32,10 +30,10 @@ fun TextWithButton(
         )
 
         Button(
-            onClick = { onClick() },
+            onClick = { onSelectDate() },
             modifier = Modifier
                 .height(50.dp)
-                .fillMaxWidth(widthPercentage),
+                .fillMaxWidth(0.4f),
             colors = botaoCinzaoColor()
         ) {
             if (buttonText != null) {
@@ -43,11 +41,10 @@ fun TextWithButton(
                     text = buttonText,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Start,
-                    style = normalStyle,
-                    color = Color.Black,
-                    overflow = TextOverflow.Ellipsis
+                    style = normalStyle
                 )
             }
         }
+
     }
 }
