@@ -1,5 +1,6 @@
 package br.lumago.solix.ui.login
 
+import CadastroScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

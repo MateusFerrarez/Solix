@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-
 private val PrimaryColor = Color(0xFF2E473F) // Verde Escuro do Botão
 private val BackgroundStartColor = Color(0xFFC8E6C9)
 private val BackgroundEndColor = Color(0xFF7CB342)
@@ -39,8 +38,10 @@ fun Login() {
         end = Offset(Float.POSITIVE_INFINITY, 0f)
     )
 
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
 
     Box(
         modifier = Modifier
@@ -53,23 +54,27 @@ fun Login() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
+
             Box(
                 modifier = Modifier
                     .width(300.dp)
                     .wrapContentHeight()
             ) {
+
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
                         .background(Color.White)
-                        .border(8.dp, Color.Black, RoundedCornerShape(16.dp))
+                        .border(1.dp, Color.LightGray, RoundedCornerShape(16.dp))
                         .padding(24.dp)
                         .padding(top = 45.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(30.dp))
 
+                    // Campo de E-mail
                     TextField(
                         value = email,
                         onValueChange = { email = it },
@@ -111,10 +116,12 @@ fun Login() {
                             unfocusedContainerColor = Color(0xFFEEEEEE)
                         )
                     )
+
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Button(
                         onClick = {
+
                             println("Email: $email, Senha: $password")
                         },
 
@@ -128,6 +135,8 @@ fun Login() {
                     }
 
                     Spacer(modifier = Modifier.height(12.dp))
+
+
                     TextButton(onClick = {  }) {
                         Text("Não tem uma conta? Cadastre-se", color = Color.Gray)
                     }
@@ -139,11 +148,11 @@ fun Login() {
                     tint = Color.Black,
                     modifier = Modifier
                         .size(90.dp)
+                        .background(Color.LightGray, shape = CircleShape)
+                        .border(4.dp, Color.White, CircleShape) // borda
                         .clip(CircleShape)
-                        .background(Color.LightGray)
-                        .border(0.dp, Color.White, CircleShape)
                         .align(Alignment.TopCenter)
-                        .offset(y = (-45).dp)
+                        .offset(y = (-45).dp) 
                 )
             }
         }
