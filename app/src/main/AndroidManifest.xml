@@ -22,6 +22,14 @@
             android:exported="true"
             android:theme="@style/Theme.Solix" />
 
+        <activity android:name=".ui.newCounter.NewCounterScreen"
+            android:exported="true"
+            android:theme="@style/Theme.Solix" />
+
+        <activity android:name=".ui.counter.CounterScreen"
+            android:exported="true"
+            android:theme="@style/Theme.Solix" />
+
         <activity
             android:name=".ui.home.HomeScreen"
             android:exported="true"

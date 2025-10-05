@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.lumago.solix.ui.counter.CounterScreen
 import br.lumago.solix.ui.payments.PaymentsScreen
 import br.lumago.solix.ui.theme.bgHomeBrush
 import br.lumago.solix.ui.theme.corBotao
@@ -91,7 +92,10 @@ fun Home() {
 
         ButtonHome(
             painter = rememberVectorPainter(Icons.Default.Delete),
-            onClick = {},
+            onClick = {
+                val activityCounterScreen = Intent(activity, CounterScreen::class.java)
+                activity.startActivity(activityCounterScreen)
+            },
             text = "Contagens"
         )
 
