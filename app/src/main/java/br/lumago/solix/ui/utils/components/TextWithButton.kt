@@ -1,4 +1,4 @@
-package br.lumago.solix.ui.utils
+package br.lumago.solix.ui.utils.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,7 +45,8 @@ fun TextWithButton(
                     textAlign = TextAlign.Start,
                     style = normalStyle,
                     color = Color.Black,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
             }
         }

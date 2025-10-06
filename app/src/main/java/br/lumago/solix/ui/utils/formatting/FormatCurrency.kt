@@ -1,4 +1,4 @@
-package br.lumago.solix.ui.utils
+package br.lumago.solix.ui.utils.formatting
 
 import java.text.NumberFormat
 import java.util.Locale

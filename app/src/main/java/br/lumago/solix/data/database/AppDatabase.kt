@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import br.lumago.solix.data.dao.CustomersDao
 import br.lumago.solix.data.dao.PaymentsDao
 import br.lumago.solix.data.database.schemas.MockSchema
 import br.lumago.solix.data.entities.Addresses
@@ -25,6 +26,7 @@ import br.lumago.solix.data.entities.Products
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun paymentsDao(): PaymentsDao
+    abstract fun customersDao() : CustomersDao
 
     companion object {
         @Volatile

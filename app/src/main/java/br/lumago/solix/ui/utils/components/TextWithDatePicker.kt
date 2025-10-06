@@ -1,4 +1,4 @@
-package br.lumago.solix.ui.utils
+package br.lumago.solix.ui.utils.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

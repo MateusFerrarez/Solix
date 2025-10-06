@@ -12,35 +12,45 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import br.lumago.solix.data.viewModels.NewPaymentViewModel
-import br.lumago.solix.ui.utils.DefaultButton
-import br.lumago.solix.ui.utils.FormatDate
-import br.lumago.solix.ui.utils.Header
-import br.lumago.solix.ui.utils.TextWithButton
-import br.lumago.solix.ui.utils.TextWithDatePicker
-import br.lumago.solix.ui.utils.TextWithTextField
+import br.lumago.solix.ui.utils.buttons.DefaultButton
+import br.lumago.solix.ui.utils.formatting.FormatDate
+import br.lumago.solix.ui.utils.components.Header
+import br.lumago.solix.ui.utils.components.TextWithButton
+import br.lumago.solix.ui.utils.components.TextWithDatePicker
+import br.lumago.solix.ui.utils.components.TextWithTextField
+import br.lumago.solix.ui.utils.dialogs.StatusDialog
 
 @Composable
 fun NewPayment(viewModel: NewPaymentViewModel) {
     val activity = LocalActivity.current!!
+    // Objects
     val customerSelected by viewModel.customerSelected.collectAsState()
     val indicatorSelected by viewModel.indicatorSelected.collectAsState()
     val dueDateSelected by viewModel.dueDate.collectAsState()
     val contractDateSelected by viewModel.contractDate.collectAsState()
-    //
+    // TextFields
     val paymentField = viewModel.paymentValue
     val observationField = viewModel.observationValue
+    // Dialog
+    val showDialog = viewModel.showDialog.collectAsState().value
+    val errorMessage by remember { mutableStateOf("") }
+    // Extra
+    val paymentIdExtra = activity.intent.getLongExtra("paymentId", 0L)
 
     LaunchedEffect(Unit) {
-        if (customerSelected == null) {
+        if (paymentIdExtra != 0L){
+            viewModel.getPaymentById(paymentIdExtra)
+        }
+        else  {
             viewModel.mock()
         }
     }
@@ -137,12 +147,26 @@ fun NewPayment(viewModel: NewPaymentViewModel) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 DefaultButton(
-                    onClick = {},
+                    onClick = {
+                        try {
+                            viewModel.insertPayment(activity)
+                        } catch (e: Exception) {
+                            viewModel.updateDialog(true)
+                        }
+                    },
                     text = "Gravar"
                 )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
         }
+    }
+
+    if (showDialog) {
+        StatusDialog(
+            onClick = { viewModel.updateDialog(false) },
+            message = "Erro ao salvar mensalidade",
+            isError = true
+        )
     }
 }

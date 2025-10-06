@@ -3,6 +3,8 @@ package br.lumago.solix.ui.theme
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -16,6 +18,8 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+val corVermelho = Color(0xFFAA2727)
 
 val corBotao = Color(0xFF2B4632)
 val corTexto = Color(0xFF709E7C)
@@ -39,9 +43,23 @@ fun botaoCinzaoColor(): ButtonColors {
 }
 
 @Composable
+fun cardCinzaoColor(): CardColors {
+    return CardDefaults.cardColors(
+        containerColor = corFundoCard
+    )
+}
+
+@Composable
 fun corBotao(): ButtonColors {
     return ButtonDefaults.buttonColors(
         containerColor = corBotao
+    )
+}
+
+@Composable
+fun corCard(): CardColors {
+    return CardDefaults.cardColors(
+        containerColor = Color.White
     )
 }
 

@@ -1,4 +1,4 @@
-package br.lumago.solix.ui.utils
+package br.lumago.solix.ui.utils.components
 
 import android.app.Activity
 import androidx.compose.foundation.background

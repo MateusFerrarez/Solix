@@ -1,5 +1,6 @@
 package br.lumago.solix.data.viewModels
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import androidx.compose.runtime.getValue
@@ -12,13 +13,16 @@ import androidx.lifecycle.viewModelScope
 import br.lumago.solix.data.entities.Payments
 import br.lumago.solix.data.entities.relations.CustomerSelected
 import br.lumago.solix.data.repositories.PaymentsRepository
-import br.lumago.solix.ui.utils.FormatDate
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewModel() {
+    private var payment: Payments? = null
     // Buttons
     var customerSelected = MutableStateFlow<CustomerSelected?>(null)
         private set
@@ -37,19 +41,30 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
 
     var observationValue by mutableStateOf(TextFieldValue(""))
         private set
+    // Dialog
+    var showDialog = MutableStateFlow(false)
+        private set
 
     fun mock() {
-        customerSelected.value = CustomerSelected("11 - MATEUS TESTE", 1L)
+        customerSelected.value = CustomerSelected("11 - MATEUS TESTE DE LARGURA DO CARD PARA VERIFICAR O TAMANHO DO OVERFLOX", 1L)
         indicatorSelected.value = CustomerSelected("12 - MATEUS TESTE 2", 2L)
     }
 
-    fun insertPayment() {
-        val payment = Payments(
+    // Insert
+    fun insertPayment(activity: Activity) {
+        val formatedPaymentValue = paymentValue.text
+            .replace("R$", "")
+            .replace(".", "")
+            .replace(",", ".")
+            .trim()
+            .toDouble()
+
+        payment = Payments(
             paymentId = 0L,
             enterpriseId = 1L,
-            customerId = customerSelected.value!!.customerID,
-            indicatorId = null,
-            montValue = paymentValue.text.toDouble(),
+            customerId = customerSelected.value!!.customerId,
+            indicatorId = indicatorSelected.value?.customerId,
+            montValue = formatedPaymentValue,
             dueDate = dueDate.value.toString(),
             contractDate = contractDate.value.toString(),
             observation = observationValue.text,
@@ -59,8 +74,24 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
         )
 
         viewModelScope.launch {
-            repository.insertPayment(payment)
+            repository.insertPayment(payment!!)
+            activity.setResult(1)
+            activity.finish()
         }
+    }
+
+    // Get
+    suspend fun getPaymentById(paymentId : Long){
+        payment = withContext(Dispatchers.IO) {
+            repository.getPaymentById(paymentId)
+        }
+
+        customerSelected.value = withContext(Dispatchers.IO) {
+            repository.getCustomerSelectedByPaymentId(paymentId)
+        }
+
+        paymentValue = TextFieldValue(payment!!.montValue.toString())
+
     }
 
     // Show
@@ -86,6 +117,10 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
     }
 
     // Update
+    fun updateDialog(value: Boolean) {
+        showDialog.update { value }
+    }
+
     fun updatePaymentValue(tempNewPaymentValue: TextFieldValue) {
         paymentValue = tempNewPaymentValue
     }
@@ -94,11 +129,11 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
         observationValue = tempNewObservation
     }
 
-    fun updateDueDate(tempDate: LocalDate){
+    fun updateDueDate(tempDate: LocalDate) {
         dueDate.value = tempDate
     }
 
-    fun updateContractDate(tempDate: LocalDate){
+    fun updateContractDate(tempDate: LocalDate) {
         contractDate.value = tempDate
     }
 

@@ -31,6 +31,13 @@ val normalStyle = TextStyle(
     color = Color.Black
 )
 
+val boldStyle = TextStyle(
+    fontFamily = fonts,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    color = Color.Black
+)
+
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,

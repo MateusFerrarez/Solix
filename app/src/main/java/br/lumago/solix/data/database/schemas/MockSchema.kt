@@ -11,7 +11,7 @@ class MockSchema {
         """
 
         const val INSERT_CUSTOMER = """INSERT INTO Customers (enterprise_id, partner_id, razao_social, documento_1, created_at)
-            values (1, '11', 'MATEUS TESTE', '10872690679', '2025-09-01T06:00:00:0000');
+            values (1, '11', 'MATEUS TESTE DE LARGURA DO CARD PARA VERIFICAR O TAMANHO DO OVERFLOX', '10872690679', '2025-09-01T06:00:00:0000');
         """
 
         const val INSERT_CUSTOMER_2 = """INSERT INTO Customers (enterprise_id, partner_id, razao_social, documento_1, created_at)

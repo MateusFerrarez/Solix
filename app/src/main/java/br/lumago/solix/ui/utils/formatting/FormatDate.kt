@@ -1,6 +1,5 @@
-package br.lumago.solix.ui.utils
+package br.lumago.solix.ui.utils.formatting
 
-import java.text.DateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
