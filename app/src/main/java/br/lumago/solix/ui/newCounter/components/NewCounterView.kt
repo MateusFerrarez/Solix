@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -23,6 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,12 +44,13 @@ import br.lumago.solix.ui.utils.PageTitle
 @Composable
 fun NewCounter(viewModel: NewCounterViewModel) {
     val activity = LocalActivity.current!!
+    val lista = viewModel.listaItem.collectAsState().value
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -65,11 +69,11 @@ fun NewCounter(viewModel: NewCounterViewModel) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Button (
+                Button(
                     onClick = {},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = corBotao
@@ -86,16 +90,26 @@ fun NewCounter(viewModel: NewCounterViewModel) {
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            Row (
+            Row(
                 modifier = Modifier.absolutePadding(20.dp)
-            ){
+            ) {
                 Text(
-                    text = "Quantidade total: qtdItem",
+                    text = "Quantidade total: ${lista.size}",
                     style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold),
                 )
             }
 
             Spacer(modifier = Modifier.height(15.dp))
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                itemsIndexed(lista, key = { index, item -> index }) { index, item ->
+                    CardItem(item)
+                    Spacer(modifier = Modifier.height((20.dp)))
+                }
+            }
         }
 
         ActionButton(

@@ -21,7 +21,7 @@ import androidx.room.PrimaryKey
     ],
 )
 data class Items(
-    @ColumnInfo(name = "item_id") @PrimaryKey(autoGenerate = true) val itemId: Long = 0,
+    @ColumnInfo(name = "item_id") @PrimaryKey(autoGenerate = true) var itemId: Long = 0,
     @ColumnInfo(name = "count_id") val countId: Long,
     @ColumnInfo(name = "product_id") val productId: Long,
     @ColumnInfo(name = "created_at") val createdAt: String? = null
