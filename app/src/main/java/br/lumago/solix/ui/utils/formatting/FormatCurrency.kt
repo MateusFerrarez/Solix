@@ -1,5 +1,6 @@
 package br.lumago.solix.ui.utils.formatting
 
+import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -11,4 +12,12 @@ class FormatCurrency(private val initValue: String) {
         val valor = initValue.toBigDecimal().movePointLeft(2)
         return formatter.format(valor)
     }
+
+    fun formatToReal(value: Double) : String {
+        return formatter.format(value)
+    }
+
+    constructor() : this (
+        initValue = ""
+    )
 }

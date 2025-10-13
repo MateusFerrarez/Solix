@@ -3,6 +3,7 @@ package br.lumago.solix.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import br.lumago.solix.data.entities.Payments
 import br.lumago.solix.data.entities.relations.PaymentCard
 
@@ -27,6 +28,8 @@ interface PaymentsDao {
     suspend fun getPaymentById(paymentId: Long): Payments
 
     // Update
+    @Update
+    suspend fun updatePaymentByPayment(payment: Payments)
 
     // Delete
     @Query("""DELETE from PAYMENTS WHERE PAYMENT_ID = :paymentId""")

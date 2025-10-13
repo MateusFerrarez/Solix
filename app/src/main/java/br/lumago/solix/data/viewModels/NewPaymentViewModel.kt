@@ -3,6 +3,7 @@ package br.lumago.solix.data.viewModels
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,7 +14,9 @@ import androidx.lifecycle.viewModelScope
 import br.lumago.solix.data.entities.Payments
 import br.lumago.solix.data.entities.relations.CustomerSelected
 import br.lumago.solix.data.repositories.PaymentsRepository
+import br.lumago.solix.ui.utils.formatting.FormatCurrency
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,6 +26,9 @@ import java.time.LocalDateTime
 
 class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewModel() {
     private var payment: Payments? = null
+    var title by mutableStateOf("Nova mensalidade")
+        private set
+
     // Buttons
     var customerSelected = MutableStateFlow<CustomerSelected?>(null)
         private set
@@ -35,19 +41,30 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
 
     var contractDate = MutableStateFlow<LocalDate>(LocalDate.now())
         private set
+
     // TextFields
     var paymentValue by mutableStateOf(TextFieldValue("R$ 0,00"))
         private set
 
     var observationValue by mutableStateOf(TextFieldValue(""))
         private set
+
     // Dialog
     var showDialog = MutableStateFlow(false)
         private set
 
-    fun mock() {
-        customerSelected.value = CustomerSelected("11 - MATEUS TESTE DE LARGURA DO CARD PARA VERIFICAR O TAMANHO DO OVERFLOX", 1L)
+    // Loading
+    var showProgress by mutableStateOf(true)
+        private set
+
+    suspend fun mock() {
+        customerSelected.value = CustomerSelected(
+            "11 - MATEUS TESTE DE LARGURA DO CARD PARA VERIFICAR O TAMANHO DO OVERFLOX",
+            1L
+        )
         indicatorSelected.value = CustomerSelected("12 - MATEUS TESTE 2", 2L)
+        delay(600)
+        showProgress = false
     }
 
     // Insert
@@ -64,7 +81,7 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
             enterpriseId = 1L,
             customerId = customerSelected.value!!.customerId,
             indicatorId = indicatorSelected.value?.customerId,
-            montValue = formatedPaymentValue,
+            monthValue = formatedPaymentValue,
             dueDate = dueDate.value.toString(),
             contractDate = contractDate.value.toString(),
             observation = observationValue.text,
@@ -80,18 +97,47 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
         }
     }
 
+    fun savePayment(activity: Activity) {
+        if (payment == null) {
+            insertPayment(activity)
+        } else {
+            updatePayment(activity)
+        }
+    }
+
     // Get
-    suspend fun getPaymentById(paymentId : Long){
-        payment = withContext(Dispatchers.IO) {
-            repository.getPaymentById(paymentId)
+    suspend fun getPaymentById(paymentId: Long) {
+        try {
+            title = "Editar mensalidade"
+
+            payment = withContext(Dispatchers.IO) {
+                repository.getPaymentById(paymentId)
+            }
+
+            if (payment == null) {
+                throw Exception("Mensalide não pode ser nula")
+            }
+
+            customerSelected.value = withContext(Dispatchers.IO) {
+                repository.getCustomerSelectedByPaymentId(paymentId)
+            }
+
+            indicatorSelected.value = withContext(Dispatchers.IO) {
+                repository.getIndicatorSelectedByPaymentId(paymentId)
+            }
+
+            paymentValue = TextFieldValue(FormatCurrency().formatToReal(payment!!.monthValue))
+            dueDate.value = LocalDate.parse(payment!!.dueDate)
+            contractDate.value = LocalDate.parse(payment!!.contractDate)
+            payment!!.observation?.let { obs ->
+                observationValue = TextFieldValue(obs)
+            }
+
+            delay(500)
+            showProgress = false
+        } catch (e: Exception) {
+            Log.d("--- DEV", "getPaymentById: EXCEPTION - $e")
         }
-
-        customerSelected.value = withContext(Dispatchers.IO) {
-            repository.getCustomerSelectedByPaymentId(paymentId)
-        }
-
-        paymentValue = TextFieldValue(payment!!.montValue.toString())
-
     }
 
     // Show
@@ -101,7 +147,7 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
         onDateChanged: (LocalDate) -> Unit
     ) {
         val dateListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            val tempDate = LocalDate.of(year, month, dayOfMonth)
+            val tempDate = LocalDate.of(year, month + 1, dayOfMonth)
             onDateChanged(tempDate)
         }
 
@@ -135,6 +181,29 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
 
     fun updateContractDate(tempDate: LocalDate) {
         contractDate.value = tempDate
+    }
+
+    fun updatePayment(activity: Activity) {
+        val formatedPaymentValue = paymentValue.text
+            .replace("R$", "")
+            .replace(".", "")
+            .replace(",", ".")
+            .trim()
+            .toDouble()
+
+        payment!!.customerId = customerSelected.value!!.customerId
+        payment!!.indicatorId = indicatorSelected.value?.customerId
+        payment!!.monthValue = formatedPaymentValue
+        payment!!.dueDate= dueDate.value.toString()
+        payment!!.contractDate = contractDate.value.toString()
+        payment!!.observation = observationValue.text.uppercase()
+        payment!!.updatedAt = LocalDateTime.now().toString()
+
+        viewModelScope.launch {
+            repository.updatePaymentByPayment(payment!!)
+            activity.setResult(2)
+            activity.finish()
+        }
     }
 
     class NewPaymentViewModelFactory(private val repository: PaymentsRepository) :

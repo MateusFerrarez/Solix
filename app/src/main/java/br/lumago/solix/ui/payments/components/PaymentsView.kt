@@ -47,6 +47,10 @@ fun PaymentsView(viewModel: PaymentsViewModel) {
             viewModel.getPayments(activity)
             viewModel.updateDialogMessage("Mensalidade cadastrada com sucesso!")
             viewModel.updateDialog(true)
+        } else if (result.resultCode == 2){
+            viewModel.getPayments(activity)
+            viewModel.updateDialogMessage("Mensalidade atualizada com sucesso!")
+            viewModel.updateDialog(true)
         }
     }
 

@@ -28,13 +28,13 @@ import androidx.room.PrimaryKey
 data class Payments(
     @ColumnInfo(name = "payment_id") @PrimaryKey(autoGenerate = true) val paymentId: Long = 0,
     @ColumnInfo(name = "enterprise_id") val enterpriseId: Long,
-    @ColumnInfo(name = "customer_id") val customerId: Long,
-    @ColumnInfo(name = "indicator_id") val indicatorId: Long? = null,
-    @ColumnInfo(name = "month_value") val montValue: Double,
-    @ColumnInfo(name = "due_date") val dueDate: String,
-    @ColumnInfo(name = "contract_date") val contractDate: String,
-    @ColumnInfo(name = "observation") val observation: String? = null,
+    @ColumnInfo(name = "customer_id") var customerId: Long,
+    @ColumnInfo(name = "indicator_id") var indicatorId: Long? = null,
+    @ColumnInfo(name = "month_value") var monthValue: Double,
+    @ColumnInfo(name = "due_date") var dueDate: String,
+    @ColumnInfo(name = "contract_date") var contractDate: String,
+    @ColumnInfo(name = "observation") var observation: String? = null,
     @ColumnInfo(name = "created_at") val createdAt: String,
-    @ColumnInfo(name = "updated_at") val updatedAt: String? = null,
+    @ColumnInfo(name = "updated_at") var updatedAt: String? = null,
     @ColumnInfo(name = "synchronized_at") val synchronizedAt: String? = null
 )

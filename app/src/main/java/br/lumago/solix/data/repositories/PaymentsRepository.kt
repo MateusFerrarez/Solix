@@ -29,6 +29,15 @@ class PaymentsRepository(context: Context) {
         return customerDao.getCustomerSelectedByPaymentId(paymentId)
     }
 
+    suspend fun getIndicatorSelectedByPaymentId(paymentId: Long): CustomerSelected? {
+        return customerDao.getIndicatorSelectedByPaymentId(paymentId)
+    }
+
+    // Update
+    suspend fun updatePaymentByPayment(payment: Payments) {
+        paymentsDao.updatePaymentByPayment(payment)
+    }
+
     // Delete
     suspend fun deletePaymentById(paymentId: Long) {
         paymentsDao.deletePaymentById(paymentId)

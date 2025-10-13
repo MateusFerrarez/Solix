@@ -14,4 +14,11 @@ interface CustomersDao {
         WHERE PAY.PAYMENT_ID = :paymentId
     """)
     suspend fun getCustomerSelectedByPaymentId(paymentId: Long) : CustomerSelected
+
+    @Query("""SELECT CS.CUSTOMER_ID as customerId, CS.razao_social as customer
+        FROM CUSTOMERS CS
+        INNER JOIN PAYMENTS PAY ON CS.CUSTOMER_ID = PAY.INDICATOR_ID
+        WHERE PAY.PAYMENT_ID = :paymentId
+    """)
+    suspend fun getIndicatorSelectedByPaymentId(paymentId: Long) : CustomerSelected?
 }
