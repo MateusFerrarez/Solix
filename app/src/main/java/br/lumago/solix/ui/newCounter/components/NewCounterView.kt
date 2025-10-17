@@ -1,7 +1,9 @@
 package br.lumago.solix.ui.newCounter.components
 
 import android.R
+import android.content.Intent
 import androidx.activity.compose.LocalActivity
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +37,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.lumago.solix.data.viewModels.NewCounterViewModel
+import br.lumago.solix.ui.barcodeReader.BarcodeReaderScreen
+import br.lumago.solix.ui.payments.PaymentsScreen
 import br.lumago.solix.ui.theme.corBotao
 import br.lumago.solix.ui.theme.titleStyle
 import br.lumago.solix.ui.utils.ActionButton
@@ -42,7 +46,7 @@ import br.lumago.solix.ui.utils.Header
 import br.lumago.solix.ui.utils.PageTitle
 
 @Composable
-fun NewCounter(viewModel: NewCounterViewModel) {
+fun NewCounter(viewModel: NewCounterViewModel, requestCamera: ActivityResultLauncher<String>?) {
     val activity = LocalActivity.current!!
     val lista = viewModel.listaItem.collectAsState().value
 
@@ -114,7 +118,9 @@ fun NewCounter(viewModel: NewCounterViewModel) {
 
         ActionButton(
             onClick = {
-
+                requestCamera?.launch(android.Manifest.permission.CAMERA)
+                val activityBarcodeReader = Intent(activity, BarcodeReaderScreen::class.java)
+                activity.startActivity(activityBarcodeReader)
             },
             text = "Novo Produto",
             modifier = Modifier

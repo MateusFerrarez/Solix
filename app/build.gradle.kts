@@ -59,4 +59,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    // Google Mobile Vision para BarcodeDetector e CameraSource
+    implementation ("com.google.android.gms:play-services-vision:20.1.3") // Versão estável
+    implementation ("com.google.android.gms:play-services-vision-common:19.1.3") // Versão estável
+
+    // Accompanist Permissions para gerenciar permissões no Compose
+    implementation ("com.google.accompanist:accompanist-permissions:0.34.0") // Versão estável
 }
