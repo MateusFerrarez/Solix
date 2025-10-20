@@ -104,12 +104,13 @@ class PaymentsViewModel(
                 }
 
                 repository.deletePaymentById(selectedPayment.value!!.paymentId)
-                updateDialogMessage("Menssagem deletada com sucesso")
+                updateDialogMessage("Mensalidade deletada com sucesso")
                 updateDialog(true)
                 getPayments(context)
             }  catch (e: Exception) {
-                PaymentHandler(e).saveLog(context)
-                updateException(e)
+                val customException = PaymentDeleteException(e.message!!)
+                PaymentHandler(customException).saveLog(context)
+                updateException(customException)
             }
         }
     }

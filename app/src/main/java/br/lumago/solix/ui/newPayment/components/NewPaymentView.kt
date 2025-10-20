@@ -22,6 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import br.lumago.solix.data.handler.NewPaymentHandler
+import br.lumago.solix.data.handler.PaymentHandler
 import br.lumago.solix.data.viewModels.NewPaymentViewModel
 import br.lumago.solix.ui.utils.buttons.DefaultButton
 import br.lumago.solix.ui.utils.formatting.FormatDate
@@ -46,7 +48,7 @@ fun NewPayment(viewModel: NewPaymentViewModel) {
     val observationField = viewModel.observationValue
     // Dialog
     val showDialog = viewModel.showDialog.collectAsState().value
-    val errorMessage by remember { mutableStateOf("") }
+    val exception = viewModel.exception.collectAsState().value
     // Extra
     val paymentIdExtra = activity.intent.getLongExtra("paymentId", 0L)
     // Progress
@@ -54,7 +56,10 @@ fun NewPayment(viewModel: NewPaymentViewModel) {
 
     LaunchedEffect(Unit) {
         if (paymentIdExtra != 0L && customerSelected == null) {
-            viewModel.getPaymentById(paymentIdExtra)
+            viewModel.getPaymentById(
+                paymentIdExtra,
+                activity
+            )
         } else {
             viewModel.mock()
         }
@@ -173,10 +178,10 @@ fun NewPayment(viewModel: NewPaymentViewModel) {
         }
     }
 
-    if (showDialog) {
+    if (exception != null) {
         StatusDialog(
             onClick = { viewModel.updateDialog(false) },
-            message = "Erro ao salvar mensalidade",
+            message = NewPaymentHandler(exception).formatException(),
             isError = true
         )
     }

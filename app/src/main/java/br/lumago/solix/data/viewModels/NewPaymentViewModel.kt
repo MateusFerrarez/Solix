@@ -14,6 +14,11 @@ import androidx.lifecycle.viewModelScope
 import br.lumago.solix.data.entities.Payments
 import br.lumago.solix.data.entities.relations.CustomerSelected
 import br.lumago.solix.data.repositories.PaymentsRepository
+import br.lumago.solix.exceptions.newPayment.NewPaymentGetException
+import br.lumago.solix.exceptions.newPayment.NewPaymentInsertException
+import br.lumago.solix.exceptions.newPayment.NewPaymentUpdateException
+import br.lumago.solix.exceptions.payment.PaymentGetException
+import br.lumago.solix.ui.utils.LogManager
 import br.lumago.solix.ui.utils.formatting.FormatCurrency
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -57,6 +62,11 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
     var showProgress by mutableStateOf(true)
         private set
 
+    //
+    var exception = MutableStateFlow<Exception?>(null)
+        private set
+
+
     suspend fun mock() {
         customerSelected.value = CustomerSelected(
             "11 - MATEUS TESTE DE LARGURA DO CARD PARA VERIFICAR O TAMANHO DO OVERFLOX",
@@ -69,31 +79,38 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
 
     // Insert
     fun insertPayment(activity: Activity) {
-        val formatedPaymentValue = paymentValue.text
-            .replace("R$", "")
-            .replace(".", "")
-            .replace(",", ".")
-            .trim()
-            .toDouble()
-
-        payment = Payments(
-            paymentId = 0L,
-            enterpriseId = 1L,
-            customerId = customerSelected.value!!.customerId,
-            indicatorId = indicatorSelected.value?.customerId,
-            monthValue = formatedPaymentValue,
-            dueDate = dueDate.value.toString(),
-            contractDate = contractDate.value.toString(),
-            observation = observationValue.text,
-            createdAt = LocalDateTime.now().toString(),
-            updatedAt = null,
-            synchronizedAt = null
-        )
-
         viewModelScope.launch {
-            repository.insertPayment(payment!!)
-            activity.setResult(1)
-            activity.finish()
+            try {
+
+                val formatedPaymentValue = paymentValue.text
+                    .replace("R$", "")
+                    .replace(".", "")
+                    .replace(",", ".")
+                    .trim()
+                    .toDouble()
+
+                payment = Payments(
+                    paymentId = 0L,
+                    enterpriseId = 1L,
+                    customerId = customerSelected.value!!.customerId,
+                    indicatorId = indicatorSelected.value?.customerId,
+                    monthValue = formatedPaymentValue,
+                    dueDate = dueDate.value.toString(),
+                    contractDate = contractDate.value.toString(),
+                    observation = observationValue.text,
+                    createdAt = LocalDateTime.now().toString(),
+                    updatedAt = null,
+                    synchronizedAt = null
+                )
+
+                repository.insertPayment(payment!!)
+                activity.setResult(1)
+                activity.finish()
+            } catch (e: Exception) {
+                val customException = NewPaymentInsertException(e.message!!)
+                LogManager(activity).createLog(customException)
+                updateException(customException)
+            }
         }
     }
 
@@ -106,7 +123,10 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
     }
 
     // Get
-    suspend fun getPaymentById(paymentId: Long) {
+    suspend fun getPaymentById(
+        paymentId: Long,
+        context: Context
+    ) {
         try {
             title = "Editar mensalidade"
 
@@ -136,7 +156,9 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
             delay(500)
             showProgress = false
         } catch (e: Exception) {
-            Log.d("--- DEV", "getPaymentById: EXCEPTION - $e")
+            val customException = NewPaymentGetException(e.message!!)
+            LogManager(context).createLog(customException)
+            updateException(customException)
         }
     }
 
@@ -165,6 +187,11 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
     // Update
     fun updateDialog(value: Boolean) {
         showDialog.update { value }
+        exception.update { null }
+    }
+
+    fun updateException(newException: Exception?) {
+        exception.update { newException }
     }
 
     fun updatePaymentValue(tempNewPaymentValue: TextFieldValue) {
@@ -184,25 +211,31 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
     }
 
     fun updatePayment(activity: Activity) {
-        val formatedPaymentValue = paymentValue.text
-            .replace("R$", "")
-            .replace(".", "")
-            .replace(",", ".")
-            .trim()
-            .toDouble()
-
-        payment!!.customerId = customerSelected.value!!.customerId
-        payment!!.indicatorId = indicatorSelected.value?.customerId
-        payment!!.monthValue = formatedPaymentValue
-        payment!!.dueDate= dueDate.value.toString()
-        payment!!.contractDate = contractDate.value.toString()
-        payment!!.observation = observationValue.text.uppercase()
-        payment!!.updatedAt = LocalDateTime.now().toString()
-
         viewModelScope.launch {
-            repository.updatePaymentByPayment(payment!!)
-            activity.setResult(2)
-            activity.finish()
+            try {
+                val formatedPaymentValue = paymentValue.text
+                    .replace("R$", "")
+                    .replace(".", "")
+                    .replace(",", ".")
+                    .trim()
+                    .toDouble()
+
+                payment!!.customerId = customerSelected.value!!.customerId
+                payment!!.indicatorId = indicatorSelected.value?.customerId
+                payment!!.monthValue = formatedPaymentValue
+                payment!!.dueDate = dueDate.value.toString()
+                payment!!.contractDate = contractDate.value.toString()
+                payment!!.observation = observationValue.text.uppercase()
+                payment!!.updatedAt = LocalDateTime.now().toString()
+
+                repository.updatePaymentByPayment(payment!!)
+                activity.setResult(2)
+                activity.finish()
+            } catch (e: Exception) {
+                val customException = NewPaymentUpdateException(e.message!!)
+                LogManager(activity).createLog(customException)
+                updateException(customException)
+            }
         }
     }
 
