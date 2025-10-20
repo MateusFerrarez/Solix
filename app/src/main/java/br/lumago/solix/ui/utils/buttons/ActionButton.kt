@@ -1,4 +1,4 @@
-package br.lumago.solix.ui.utils
+package br.lumago.solix.ui.utils.buttons
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

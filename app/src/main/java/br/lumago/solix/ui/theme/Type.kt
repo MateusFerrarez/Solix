@@ -24,11 +24,18 @@ val titleStyle = TextStyle(
     color = Color.White
 )
 
-val textStyle = TextStyle(
+val normalStyle = TextStyle(
     fontFamily = fonts,
     fontWeight = FontWeight.Normal,
     fontSize = 14.sp,
-    color = corTexto
+    color = Color.Black
+)
+
+val boldStyle = TextStyle(
+    fontFamily = fonts,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+    color = Color.Black
 )
 
 val Typography = Typography(
