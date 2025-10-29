@@ -22,8 +22,12 @@
             android:exported="true"
             android:theme="@style/Theme.Solix" />
 
+        <activity android:name=".ui.home.HomeScreen"
+            android:exported="true"
+            android:theme="@style/Theme.Solix"/>
+
         <activity
-            android:name=".ui.home.HomeScreen"
+            android:name=".ui.login.LoginScreen"
             android:exported="true"
             android:theme="@style/Theme.Solix">
             <intent-filter>
