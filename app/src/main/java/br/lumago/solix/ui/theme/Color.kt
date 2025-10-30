@@ -88,3 +88,22 @@ fun estiloField(): TextFieldColors {
         unfocusedIndicatorColor = Color.Transparent
     )
 }
+
+@Composable
+fun estiloFieldBusca() : TextFieldColors {
+    return TextFieldDefaults.colors(
+        unfocusedTextColor = Color.Black,
+        focusedTextColor = Color.Black,
+        unfocusedContainerColor = corFundoCard,
+        focusedContainerColor = corFundoCard,
+        disabledContainerColor = corFundoCard,
+        unfocusedIndicatorColor = Color.Transparent,
+        focusedIndicatorColor = Color.Transparent,
+        disabledIndicatorColor = Color.Transparent,
+        cursorColor = Color.Black,
+        selectionColors = TextSelectionColors(
+            handleColor = Color.Blue,
+            backgroundColor = corTexto.copy(alpha = 0.6f)
+        )
+    )
+}

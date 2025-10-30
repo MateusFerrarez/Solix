@@ -20,10 +20,11 @@ interface PaymentsDao {
         PAY.month_value as value, PAY.contract_date contractDate, CASE WHEN PAY.synchronized_at IS NULL THEN 0 ELSE 1 END as isSychronized
         FROM PAYMENTS PAY
         INNER JOIN CUSTOMERS C ON PAY.customer_id = C.customer_id
+        WHERE (:query = '%%' or C.razao_social LIKE :query or C.nome_fantasia LIKE :query) 
         ORDER BY PAY.PAYMENT_ID DESC
     """
     )
-    fun getPayments(): PagingSource<Int, PaymentCard>
+    fun getPayments(query: String): PagingSource<Int, PaymentCard>
 
     @Query("""SELECT * FROM PAYMENTS WHERE PAYMENT_ID = :paymentId""")
     suspend fun getPaymentById(paymentId: Long): Payments

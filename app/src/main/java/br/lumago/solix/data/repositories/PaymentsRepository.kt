@@ -22,7 +22,7 @@ class PaymentsRepository(context: Context) {
     }
 
     // Get
-    fun getPayments(): Flow<PagingData<PaymentCard>> = Pager(
+    fun getPayments(query: String): Flow<PagingData<PaymentCard>> = Pager(
         config = PagingConfig(
             pageSize = 15,
             initialLoadSize = 15,
@@ -31,7 +31,7 @@ class PaymentsRepository(context: Context) {
         )
     ) {
         DelayedPaymentsPagingSource(
-            delegate = paymentsDao.getPayments(),
+            delegate = paymentsDao.getPayments(query),
         )
     }.flow
 
