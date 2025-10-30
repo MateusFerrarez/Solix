@@ -5,18 +5,21 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import br.lumago.solix.data.entities.relations.PaymentCard
-import br.lumago.solix.data.handler.PaymentHandler
+import br.lumago.solix.exceptions.handler.PaymentHandler
 import br.lumago.solix.data.repositories.PaymentsRepository
 import br.lumago.solix.exceptions.payment.PaymentDeleteException
 import br.lumago.solix.exceptions.payment.PaymentGetException
 import br.lumago.solix.exceptions.payment.PaymentSynchronizedException
 import br.lumago.solix.ui.newPayment.NewPaymentScreen
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -27,8 +30,8 @@ class PaymentsViewModel(
         private set
     var showChooserDialog = MutableStateFlow(false)
         private set
-    var payments = MutableStateFlow<List<PaymentCard>>(emptyList())
-        private set
+    private val _pagingFlow = MutableStateFlow<Flow<PagingData<PaymentCard>>?>(null)
+    val pagingFlow: StateFlow<Flow<PagingData<PaymentCard>>?> = _pagingFlow
 
     var showDialog = MutableStateFlow(false)
         private set
@@ -62,7 +65,9 @@ class PaymentsViewModel(
     fun getPayments(context: Context) {
         viewModelScope.launch {
             try {
-                payments.value = repository.getPayments()
+                _pagingFlow.value = repository
+                    .getPayments()
+                    .cachedIn(viewModelScope)
             } catch (e: Exception) {
                 val customException = PaymentGetException(e.message!!)
                 PaymentHandler(customException).saveLog(context)
@@ -107,7 +112,7 @@ class PaymentsViewModel(
                 updateDialogMessage("Mensalidade deletada com sucesso")
                 updateDialog(true)
                 getPayments(context)
-            }  catch (e: Exception) {
+            } catch (e: Exception) {
                 val customException = PaymentDeleteException(e.message!!)
                 PaymentHandler(customException).saveLog(context)
                 updateException(customException)

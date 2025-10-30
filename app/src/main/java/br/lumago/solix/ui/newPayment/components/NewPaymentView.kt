@@ -19,7 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import br.lumago.solix.data.handler.NewPaymentHandler
+import br.lumago.solix.exceptions.handler.NewPaymentHandler
 import br.lumago.solix.data.viewModels.NewPaymentViewModel
 import br.lumago.solix.ui.utils.buttons.DefaultButton
 import br.lumago.solix.ui.utils.formatting.FormatDate

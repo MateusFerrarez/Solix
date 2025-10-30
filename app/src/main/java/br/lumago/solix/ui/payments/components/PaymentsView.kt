@@ -1,6 +1,5 @@
 package br.lumago.solix.ui.payments.components
 
-import android.content.Intent
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,18 +20,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import br.lumago.solix.data.handler.PaymentHandler
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
+import br.lumago.solix.exceptions.handler.PaymentHandler
 import br.lumago.solix.data.viewModels.PaymentsViewModel
-import br.lumago.solix.ui.newPayment.NewPaymentScreen
 import br.lumago.solix.ui.utils.buttons.ActionButton
+import br.lumago.solix.ui.utils.components.CircleProgress
 import br.lumago.solix.ui.utils.components.Header
 import br.lumago.solix.ui.utils.dialogs.ChooserDialog
 import br.lumago.solix.ui.utils.dialogs.StatusDialog
+import kotlin.text.append
 
 @Composable
 fun PaymentsView(viewModel: PaymentsViewModel) {
     val activity = LocalActivity.current!!
-    val payments = viewModel.payments.collectAsState().value
+    val pagingFlow = viewModel.pagingFlow.collectAsState().value
+    val lazyItems = pagingFlow?.collectAsLazyPagingItems()
     //
     val showDialog = viewModel.showDialog.collectAsState().value
     val showChooserDialog = viewModel.showChooserDialog.collectAsState().value
@@ -74,20 +77,54 @@ fun PaymentsView(viewModel: PaymentsViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 contentPadding = PaddingValues(10.dp)
             ) {
-                items(payments, key = { payment -> payment.paymentId }) { payment ->
-                    Spacer(modifier = Modifier.height(10.dp))
+                if (lazyItems != null) {
+                    items(lazyItems.itemCount) { index ->
+                        lazyItems[index]?.let { payment ->
+                            Spacer(modifier = Modifier.height(10.dp))
 
-                    CardPayment(
-                        payment,
-                        onDeleteClick = { viewModel.updatePaymentId(payment) },
-                        onCardClick = {
-                            viewModel.openEditPaymentScreen(
-                                launcher,
-                                activity,
-                                payment.paymentId
+                            CardPayment(
+                                payment,
+                                onDeleteClick = { viewModel.updatePaymentId(payment) },
+                                onCardClick = {
+                                    viewModel.openEditPaymentScreen(
+                                        launcher,
+                                        activity,
+                                        payment.paymentId
+                                    )
+                                }
                             )
                         }
-                    )
+                    }
+
+                    lazyItems.apply {
+                        when {
+                            loadState.refresh is LoadState.Loading -> {
+                                item {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(bottom = 15.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                    ) {
+                                        CircleProgress()
+                                    }
+                                }
+                            }
+
+                            loadState.append is LoadState.Loading -> {
+                                item {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(bottom = 15.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                    ) {
+                                        CircleProgress()
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -1,4 +1,4 @@
-package br.lumago.solix.data.handler
+package br.lumago.solix.exceptions.handler
 
 import android.content.Context
 

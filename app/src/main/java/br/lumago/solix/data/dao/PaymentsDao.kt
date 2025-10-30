@@ -1,5 +1,6 @@
 package br.lumago.solix.data.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -22,7 +23,7 @@ interface PaymentsDao {
         ORDER BY PAY.PAYMENT_ID DESC
     """
     )
-    suspend fun getPayments(): List<PaymentCard>
+    fun getPayments(): PagingSource<Int, PaymentCard>
 
     @Query("""SELECT * FROM PAYMENTS WHERE PAYMENT_ID = :paymentId""")
     suspend fun getPaymentById(paymentId: Long): Payments
