@@ -83,7 +83,7 @@ fun estiloField(): TextFieldColors {
             backgroundColor = corTexto.copy(alpha = 0.6f)
         ),
         unfocusedLabelColor = Color.Black,
-        unfocusedTextColor = Color.LightGray,
+        unfocusedTextColor = Color.Black,
         unfocusedContainerColor = corFundoCard,
         unfocusedIndicatorColor = Color.Transparent
     )

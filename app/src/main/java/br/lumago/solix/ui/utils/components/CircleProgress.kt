@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import br.lumago.solix.ui.theme.corBotao
 
 @Composable
-fun ProgressCircle() {
+fun CircleProgress() {
     CircularProgressIndicator(
         color = corBotao,
     )
