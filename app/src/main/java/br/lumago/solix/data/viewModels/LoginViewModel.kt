@@ -10,8 +10,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.lumago.solix.ui.home.HomeScreen
+import br.lumago.solix.ui.signUp.SignUpScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlin.math.sign
 
 class LoginViewModel : ViewModel() {
     // TextFields
@@ -25,6 +27,11 @@ class LoginViewModel : ViewModel() {
         val homeScreen = Intent(activity, HomeScreen::class.java)
         activity.startActivity(homeScreen)
         activity.finish()
+    }
+
+    fun openSignUpScreen(activity: Activity){
+        val signUpScreen = Intent(activity, SignUpScreen::class.java)
+        activity.startActivity(signUpScreen)
     }
 
     // Dialog

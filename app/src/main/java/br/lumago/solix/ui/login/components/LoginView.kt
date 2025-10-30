@@ -19,13 +19,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,12 +39,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import br.lumago.solix.data.viewModels.LoginViewModel
 import br.lumago.solix.ui.theme.bgHomeBrush
 import br.lumago.solix.ui.theme.fonts
+import br.lumago.solix.ui.theme.titleStyle
 import br.lumago.solix.ui.utils.buttons.DefaultButton
+import br.lumago.solix.ui.utils.components.DefaultTextField
 import br.lumago.solix.ui.utils.dialogs.StatusDialog
 
 @Composable
@@ -47,6 +58,7 @@ fun LoginView(viewModel: LoginViewModel) {
     // TextFields
     val emailField = viewModel.emailValue.collectAsState()
     val passwordField = viewModel.passwordValue.collectAsState()
+    var showPassword by remember { mutableStateOf(false) }
     // Dialogs
     val showMessageDialog = viewModel.showMessageDialog.collectAsState().value
 
@@ -56,7 +68,7 @@ fun LoginView(viewModel: LoginViewModel) {
 
     if (showMessageDialog) {
         StatusDialog(
-            onClick = {viewModel.updateMessageDialog(false)},
+            onClick = { viewModel.updateMessageDialog(false) },
             message = "Deseja mesmo fechar o app?",
             isError = false
         )
@@ -74,7 +86,7 @@ fun LoginView(viewModel: LoginViewModel) {
         ) {
             Box(
                 modifier = Modifier
-                    .width(300.dp)
+                    .width(355.dp)
                     .wrapContentHeight()
             ) {
                 Column(
@@ -82,8 +94,8 @@ fun LoginView(viewModel: LoginViewModel) {
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
                         .background(Color.White)
-                        .border(1.dp, Color.LightGray, RoundedCornerShape(16.dp))
-                        .padding(vertical = 24.dp, horizontal = 5.dp),
+                        .border(1.dp, Color.Transparent, RoundedCornerShape(16.dp))
+                        .padding(vertical = 24.dp, horizontal = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Icon(
@@ -97,48 +109,39 @@ fun LoginView(viewModel: LoginViewModel) {
                             .clip(CircleShape)
                     )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(25.dp))
 
-                    TextField(
-                        value = emailField.value,
-                        onValueChange = { email -> viewModel.updateEmailField(email) },
-                        label = { Text("E-mail") },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Person,
-                                contentDescription = null
-                            )
-                        },
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedContainerColor = Color(0xFFEEEEEE),
-                            unfocusedContainerColor = Color(0xFFEEEEEE)
-                        )
+                    Text(
+                        text = "Login",
+                        style = titleStyle,
+                        color = Color.Black
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(25.dp))
 
-                    TextField(
-                        value = passwordField.value,
-                        onValueChange = { password -> viewModel.updatePasswordField(password) },
-                        label = { Text("Senha") },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Lock,
-                                contentDescription = null
-                            )
-                        },
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedContainerColor = Color(0xFFEEEEEE),
-                            unfocusedContainerColor = Color(0xFFEEEEEE)
-                        )
+                    DefaultTextField(
+                        label = "Email",
+                        field = emailField.value,
+                        onTextFieldChange = { viewModel.updateEmailField(it) },
+                        onIconClick = {  },
+                        icon = Icons.Default.Person,
+                        isClickable = false,
+                        isPassword = false,
+                        showPassword = true,
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    DefaultTextField(
+                        label = "Senha",
+                        field = passwordField.value,
+                        onTextFieldChange = { viewModel.updatePasswordField(it) },
+                        onIconClick = { showPassword = !showPassword },
+                        icon = Icons.Default.Lock,
+                        isClickable = true,
+                        showPassword = showPassword,
+                        isPassword = true,
+                        action = ImeAction.Done
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -151,8 +154,17 @@ fun LoginView(viewModel: LoginViewModel) {
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    TextButton(onClick = {
-                    }) {
+                    TextButton(
+                        onClick = {
+                            viewModel.openSignUpScreen(activity)
+                        },
+                        colors = ButtonColors(
+                            containerColor = Color.White,
+                            contentColor = Color.Black,
+                            disabledContainerColor = Color.Gray,
+                            disabledContentColor = Color.Gray
+                        )
+                    ) {
                         Text(text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontFamily = fonts, color = Color.Black)) {
                                 append("Não tem uma conta?")
