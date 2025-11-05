@@ -1,9 +1,8 @@
-package br.lumago.solix.data.viewModels
+package br.lumago.solix.data.viewModels.payment
 
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,7 +16,6 @@ import br.lumago.solix.data.repositories.PaymentsRepository
 import br.lumago.solix.exceptions.newPayment.NewPaymentGetException
 import br.lumago.solix.exceptions.newPayment.NewPaymentInsertException
 import br.lumago.solix.exceptions.newPayment.NewPaymentUpdateException
-import br.lumago.solix.exceptions.payment.PaymentGetException
 import br.lumago.solix.ui.utils.LogManager
 import br.lumago.solix.ui.utils.formatting.FormatCurrency
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +27,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewModel() {
+class PaymentHandlerViewModel(private val repository: PaymentsRepository) : ViewModel() {
     private var payment: Payments? = null
     var title by mutableStateOf("Nova mensalidade")
         private set
@@ -242,7 +240,7 @@ class NewPaymentViewModel(private val repository: PaymentsRepository) : ViewMode
     class NewPaymentViewModelFactory(private val repository: PaymentsRepository) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return NewPaymentViewModel(repository) as T
+            return PaymentHandlerViewModel(repository) as T
         }
     }
 }

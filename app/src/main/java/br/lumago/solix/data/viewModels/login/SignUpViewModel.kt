@@ -1,4 +1,4 @@
-package br.lumago.solix.data.viewModels
+package br.lumago.solix.data.viewModels.login
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel

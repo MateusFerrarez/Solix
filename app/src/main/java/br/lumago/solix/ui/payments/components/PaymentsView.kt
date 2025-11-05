@@ -27,7 +27,6 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -40,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import br.lumago.solix.exceptions.handler.PaymentHandler
-import br.lumago.solix.data.viewModels.PaymentsViewModel
+import br.lumago.solix.data.viewModels.payment.PaymentsViewModel
 import br.lumago.solix.ui.theme.estiloFieldBusca
 import br.lumago.solix.ui.utils.buttons.ActionButton
 import br.lumago.solix.ui.utils.components.CircleProgress
@@ -83,10 +82,6 @@ fun PaymentsView(viewModel: PaymentsViewModel) {
     val colors1 = SearchBarDefaults.colors(
         containerColor = Color.White
     )
-
-    LaunchedEffect(Unit) {
-        viewModel.getPayments(buscaBanco)
-    }
 
     Box(
         modifier = Modifier

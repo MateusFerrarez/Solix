@@ -1,8 +1,7 @@
-package br.lumago.solix.data.viewModels
+package br.lumago.solix.data.viewModels.payment
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.core.text.isDigitsOnly
@@ -16,15 +15,13 @@ import br.lumago.solix.data.repositories.PaymentsRepository
 import br.lumago.solix.exceptions.payment.PaymentDeleteException
 import br.lumago.solix.exceptions.payment.PaymentGetException
 import br.lumago.solix.exceptions.payment.PaymentSynchronizedException
-import br.lumago.solix.ui.newPayment.NewPaymentScreen
+import br.lumago.solix.ui.paymentHandler.PaymentHandlerScreen
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -73,8 +70,8 @@ class PaymentsViewModel(
         launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
         activity: Activity
     ) {
-        val newPaymentScreen = Intent(activity, NewPaymentScreen::class.java)
-        launcher.launch(newPaymentScreen)
+        val paymentHandlerScreen = Intent(activity, PaymentHandlerScreen::class.java)
+        launcher.launch(paymentHandlerScreen)
     }
 
     fun openEditPaymentScreen(
@@ -82,7 +79,7 @@ class PaymentsViewModel(
         activity: Activity,
         paymentId: Long
     ) {
-        val editPaymentScreen = Intent(activity, NewPaymentScreen::class.java)
+        val editPaymentScreen = Intent(activity, PaymentHandlerScreen::class.java)
         editPaymentScreen.putExtra("paymentId", paymentId)
         launcher.launch(editPaymentScreen)
     }
@@ -91,7 +88,6 @@ class PaymentsViewModel(
     fun getPayments(query: String) {
         viewModelScope.launch {
             try {
-                Log.d("--- DEV", "getPayments: $query")
                 _pagingFlow.value = repository
                     .getPayments(query)
                     .cachedIn(viewModelScope)

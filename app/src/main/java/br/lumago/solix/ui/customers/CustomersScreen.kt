@@ -1,23 +1,23 @@
-package br.lumago.solix.ui.signUp
+package br.lumago.solix.ui.customers
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
-import br.lumago.solix.data.viewModels.login.SignUpViewModel
-import br.lumago.solix.ui.signUp.components.SignUpView
+import br.lumago.solix.data.viewModels.customer.CustomerViewModel
+import br.lumago.solix.ui.customers.components.CustomersView
 
-class SignUpScreen : ComponentActivity() {
+class CustomersScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val viewModel = ViewModelProvider(
             this,
-            SignUpViewModel.SignUpViewModelFactory()
-        )[SignUpViewModel::class]
+            CustomerViewModel.CustomerViewModelFactory()
+        )[CustomerViewModel::class]
 
         setContent {
-            SignUpView(viewModel)
+            CustomersView(viewModel)
         }
     }
 }

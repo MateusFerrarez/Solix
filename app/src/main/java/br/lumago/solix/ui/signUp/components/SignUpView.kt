@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.lumago.solix.data.viewModels.SignUpViewModel
+import br.lumago.solix.data.viewModels.login.SignUpViewModel
 import br.lumago.solix.ui.theme.boldStyle
 import br.lumago.solix.ui.theme.corGradienteHome1
 import br.lumago.solix.ui.utils.buttons.DefaultButton

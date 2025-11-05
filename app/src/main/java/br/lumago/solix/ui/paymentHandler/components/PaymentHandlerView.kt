@@ -1,4 +1,4 @@
-package br.lumago.solix.ui.newPayment.components
+package br.lumago.solix.ui.paymentHandler.components
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import br.lumago.solix.exceptions.handler.NewPaymentHandler
-import br.lumago.solix.data.viewModels.NewPaymentViewModel
+import br.lumago.solix.data.viewModels.payment.PaymentHandlerViewModel
 import br.lumago.solix.ui.utils.buttons.DefaultButton
 import br.lumago.solix.ui.utils.formatting.FormatDate
 import br.lumago.solix.ui.utils.components.Header
@@ -31,7 +31,7 @@ import br.lumago.solix.ui.utils.components.TextWithTextField
 import br.lumago.solix.ui.utils.dialogs.StatusDialog
 
 @Composable
-fun NewPayment(viewModel: NewPaymentViewModel) {
+fun NewPayment(viewModel: PaymentHandlerViewModel) {
     val activity = LocalActivity.current!!
     val title = viewModel.title
     // Objects

@@ -1,11 +1,7 @@
-package br.lumago.solix.data.viewModels
+package br.lumago.solix.data.viewModels.login
 
 import android.app.Activity
 import android.content.Intent
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +9,6 @@ import br.lumago.solix.ui.home.HomeScreen
 import br.lumago.solix.ui.signUp.SignUpScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlin.math.sign
 
 class LoginViewModel : ViewModel() {
     // TextFields

@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
 import br.lumago.solix.data.repositories.PaymentsRepository
-import br.lumago.solix.data.viewModels.PaymentsViewModel
+import br.lumago.solix.data.viewModels.payment.PaymentsViewModel
 import br.lumago.solix.ui.payments.components.PaymentsView
 
 class PaymentsScreen : ComponentActivity() {

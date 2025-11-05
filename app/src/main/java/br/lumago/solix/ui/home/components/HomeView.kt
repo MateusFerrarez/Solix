@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.lumago.solix.data.viewModels.home.HomeViewModel
 import br.lumago.solix.ui.payments.PaymentsScreen
 import br.lumago.solix.ui.theme.bgHomeBrush
 import br.lumago.solix.ui.theme.corBotao
@@ -34,7 +35,7 @@ import br.lumago.solix.ui.theme.corGradienteHome2
 import br.lumago.solix.ui.theme.titleStyle
 
 @Composable
-fun Home() {
+fun Home(viewModel: HomeViewModel) {
     val activity = LocalActivity.current!!
 
     Column(
@@ -70,7 +71,9 @@ fun Home() {
 
         ButtonHome(
             painter = rememberVectorPainter(Icons.Default.Person),
-            onClick = {},
+            onClick = {
+                viewModel.openCustomersScreen(activity)
+            },
             text = "Clientes"
         )
 
@@ -83,8 +86,7 @@ fun Home() {
         ButtonHome(
             painter = rememberVectorPainter(Icons.Default.Person),
             onClick = {
-                val activityPaymentsScreen = Intent(activity, PaymentsScreen::class.java)
-                activity.startActivity(activityPaymentsScreen)
+                viewModel.openPaymentsScreen(activity)
             },
             text = "Mensalidades"
         )
