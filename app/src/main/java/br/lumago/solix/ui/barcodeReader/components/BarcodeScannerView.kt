@@ -2,8 +2,10 @@ package br.lumago.solix.ui.barcodeReader.components
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.yourproject.BarcodeReaderView
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -23,36 +24,30 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import androidx.core.util.isNotEmpty
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun BarcodeScannerView() {
+    val activity = LocalActivity.current!!
     val context = LocalContext.current
 
-    // Estado para armazenar o último código de barras detectado
-    var detectedBarcode by remember { mutableStateOf<String?>(null) }
-
-    // 1. Gerenciamento de Permissões da Câmera
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
 
-    // Solicita a permissão quando o Composable é inicializado
     LaunchedEffect(Unit) {
-        // Apenas lança a requisição se a permissão não foi concedida e não há um "rationale" para mostrar
         if (!cameraPermissionState.status.isGranted && !cameraPermissionState.status.shouldShowRationale) {
             cameraPermissionState.launchPermissionRequest()
         }
     }
 
     if (cameraPermissionState.status.isGranted) {
-        // 2. Setup do BarcodeDetector e CameraSource
         val barcodeDetector = remember {
             BarcodeDetector.Builder(context)
-                .setBarcodeFormats(Barcode.EAN_13) // Você pode definir vários formatos aqui
+                .setBarcodeFormats(Barcode.EAN_13)
                 .build()
         }
 
-        // Configura o processador do BarcodeDetector e o libera quando o Composable é descartado
         DisposableEffect(barcodeDetector) {
             if (!barcodeDetector.isOperational) {
                 Log.w("BarcodeScannerScreen", "Dependências do detector (ex: Google Play Services) ainda não estão disponíveis.")
@@ -65,14 +60,13 @@ fun BarcodeScannerView() {
 
                     override fun receiveDetections(detections: Detector.Detections<Barcode>?) {
                         val barcodes = detections?.detectedItems
-                        if (barcodes != null && barcodes.size() != 0) {
-                            // Processa o primeiro código de barras detectado.
+                        if (barcodes != null && barcodes.isNotEmpty()) {
                             val barcode = barcodes.valueAt(0)
-                            // Atualiza o estado na thread principal para acionar a recomposição da UI
-                            detectedBarcode = barcode.rawValue
-
-                            // Aqui você poderia adicionar lógica para parar a câmera,
-                            // navegar para outra tela, etc., após a detecção.
+                            barcodeDetector.release()
+                            val result = Intent()
+                            result.putExtra("product", barcode.rawValue)
+                            activity.setResult(1, result)
+                            activity.finish()
                         }
                     }
                 })
@@ -100,17 +94,8 @@ fun BarcodeScannerView() {
             Box(Modifier.weight(1f)) {
                 BarcodeReaderView(cameraSource)
             }
-            // Exibe o código de barras detectado ou uma mensagem
-            detectedBarcode?.let { barcode ->
-                Text(
-                    text = "Código de Barras Detectado: $barcode",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            } ?: Text(
+
+            Text(
                 text = "Aponte a câmera para um código de barras...",
                 modifier = Modifier
                     .fillMaxWidth()

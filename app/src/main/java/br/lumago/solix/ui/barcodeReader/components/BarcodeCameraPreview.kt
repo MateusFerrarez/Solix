@@ -1,4 +1,4 @@
-package com.example.yourproject // Ajuste o nome do seu pacote
+package br.lumago.solix.ui.barcodeReader.components
 
 import android.Manifest
 import android.util.Log
@@ -29,10 +29,10 @@ fun BarcodeReaderView(cameraSource: CameraSource) {
                 holder.addCallback(object : SurfaceHolder.Callback {
                     override fun surfaceCreated(holder: SurfaceHolder) {
                         try {
-                            cameraSource.start(holder) // Inicia a câmera quando a superfície é criada
+                            cameraSource.start(holder)
                         } catch (e: IOException) {
                             Toast.makeText(context, "Erro ao iniciar a câmera: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
-                        } catch (e: SecurityException) {
+                        } catch (_: SecurityException) {
                             Toast.makeText(context, "Permissão de câmera negada. Por favor, conceda a permissão.", Toast.LENGTH_LONG).show()
                         }
                     }
