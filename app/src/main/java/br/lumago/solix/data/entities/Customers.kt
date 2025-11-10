@@ -25,15 +25,15 @@ import androidx.room.PrimaryKey
 )
 data class Customers(
     @ColumnInfo(name = "customer_id") @PrimaryKey(autoGenerate = true) val customerId: Long = 0,
-    @ColumnInfo(name = "enterprise_id") val enterpriseId: Long,
-    @ColumnInfo(name = "partner_id") val partnerId: String? = null,
+    @ColumnInfo(name = "enterprise_id") val enterpriseId: Long = 1L,
+    @ColumnInfo(name = "partner_id") var partnerId: String? = null,
     @ColumnInfo(name = "firebase_id") val firebaseId: String? = null,
-    @ColumnInfo(name = "razao_social") val razaoSocial: String,
-    @ColumnInfo(name = "nome_fantasia") val nomeFantasia: String? = null,
-    @ColumnInfo(name = "documento_1") val documento1: String,
-    @ColumnInfo(name = "documento_2") val documento2: String? = null,
+    @ColumnInfo(name = "razao_social") var razaoSocial: String = "",
+    @ColumnInfo(name = "nome_fantasia") var nomeFantasia: String? = null,
+    @ColumnInfo(name = "documento_1") var documento1: String = "",
+    @ColumnInfo(name = "documento_2") var documento2: String? = null,
     @ColumnInfo(name = "status", defaultValue = "O") val status: String = "O",
-    @ColumnInfo(name = "created_at") val createdAt: String,
+    @ColumnInfo(name = "created_at", defaultValue = "CURRENT_TIMESTAMP") val createdAt: String? = null,
     @ColumnInfo(name = "updated_at") val updatedAt: String? = null,
-    @ColumnInfo(name = "synchronized_at") val synchronizedAt: String? = null
+    @ColumnInfo(name = "synchronized_at") var synchronizedAt: String? = null
 )

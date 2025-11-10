@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import br.lumago.solix.data.DelayedPaymentsPagingSource
+import br.lumago.solix.data.paging.DelayedPaymentsPagingSource
 import br.lumago.solix.data.database.AppDatabase
 import br.lumago.solix.data.entities.Payments
 import br.lumago.solix.data.entities.relations.CustomerSelected

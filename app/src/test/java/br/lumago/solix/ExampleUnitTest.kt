@@ -1,5 +1,9 @@
 package br.lumago.solix
 
+import br.lumago.solix.data.adapters.CustomerFirebaseAdapter
+import br.lumago.solix.data.entities.Customers
+import kotlinx.serialization.json.JsonObject
+import org.json.JSONObject
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -12,6 +16,6 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+
     }
 }

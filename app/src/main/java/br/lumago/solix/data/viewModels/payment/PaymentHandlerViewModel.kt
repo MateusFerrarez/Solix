@@ -3,6 +3,7 @@ package br.lumago.solix.data.viewModels.payment
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,9 +14,9 @@ import androidx.lifecycle.viewModelScope
 import br.lumago.solix.data.entities.Payments
 import br.lumago.solix.data.entities.relations.CustomerSelected
 import br.lumago.solix.data.repositories.PaymentsRepository
-import br.lumago.solix.exceptions.newPayment.NewPaymentGetException
-import br.lumago.solix.exceptions.newPayment.NewPaymentInsertException
-import br.lumago.solix.exceptions.newPayment.NewPaymentUpdateException
+import br.lumago.solix.exceptions.paymentHandler.NewPaymentGetException
+import br.lumago.solix.exceptions.paymentHandler.NewPaymentInsertException
+import br.lumago.solix.exceptions.paymentHandler.NewPaymentUpdateException
 import br.lumago.solix.ui.utils.LogManager
 import br.lumago.solix.ui.utils.formatting.FormatCurrency
 import kotlinx.coroutines.Dispatchers
@@ -79,7 +80,6 @@ class PaymentHandlerViewModel(private val repository: PaymentsRepository) : View
     fun insertPayment(activity: Activity) {
         viewModelScope.launch {
             try {
-
                 val formatedPaymentValue = paymentValue.text
                     .replace("R$", "")
                     .replace(".", "")

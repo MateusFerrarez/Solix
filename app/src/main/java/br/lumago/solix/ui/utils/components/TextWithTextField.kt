@@ -29,9 +29,11 @@ fun TextWithTextField(
     minHeight: Dp = 50.dp,
     charLimit: Int = 500,
     onlyNumbers: Boolean = false,
+    formatNumber: Boolean = false,
     onValueChange: (TextFieldValue) -> Unit,
     widthPercentage: Float,
-    roundedPercentage: Int = 60
+    roundedPercentage: Int = 60,
+    singleLine: Boolean = true
 ) {
     Column {
         Text(
@@ -51,12 +53,12 @@ fun TextWithTextField(
             },
             value = value,
             onValueChange = { newValue ->
-                val formatedValue = when (onlyNumbers) {
+                val formatedValue = when (formatNumber) {
                     true -> newValue.text.filter { text -> text.isDigit() }
                     false -> newValue.text.take(charLimit)
                 }
 
-                val tempNewValue = when (onlyNumbers) {
+                val tempNewValue = when (formatNumber) {
                     true -> FormatCurrency(formatedValue).formart()
                     false -> formatedValue
                 }
@@ -79,7 +81,7 @@ fun TextWithTextField(
             colors = estiloField(),
             shape = RoundedCornerShape(roundedPercentage),
             textStyle = normalStyle,
-            singleLine = onlyNumbers
+            singleLine = singleLine
         )
     }
 }

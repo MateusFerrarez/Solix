@@ -99,7 +99,9 @@ fun Home(viewModel: HomeViewModel) {
 
         ButtonHome(
             painter = rememberVectorPainter(Icons.Default.Delete),
-            onClick = {},
+            onClick = {
+                viewModel.openSyncScreen(activity)
+            },
             text = "Sincronização"
         )
 

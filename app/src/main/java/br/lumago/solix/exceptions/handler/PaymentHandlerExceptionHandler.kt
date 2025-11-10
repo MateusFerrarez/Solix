@@ -1,12 +1,12 @@
 package br.lumago.solix.exceptions.handler
 
 import android.content.Context
-import br.lumago.solix.exceptions.newPayment.NewPaymentGetException
-import br.lumago.solix.exceptions.newPayment.NewPaymentInsertException
-import br.lumago.solix.exceptions.newPayment.NewPaymentUpdateException
+import br.lumago.solix.exceptions.paymentHandler.NewPaymentGetException
+import br.lumago.solix.exceptions.paymentHandler.NewPaymentInsertException
+import br.lumago.solix.exceptions.paymentHandler.NewPaymentUpdateException
 import br.lumago.solix.ui.utils.LogManager
 
-class NewPaymentHandler(override val exception: Exception) : ExceptionHandler() {
+class PaymentHandlerExceptionHandler(override val exception: Exception) : ExceptionHandler() {
     override fun formatException(): String {
         val formattedException = when(exception){
             is NewPaymentInsertException -> "Erro ao salvar mensalidade!"

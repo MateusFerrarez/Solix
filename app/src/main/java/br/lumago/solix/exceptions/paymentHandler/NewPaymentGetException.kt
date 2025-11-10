@@ -1,3 +1,3 @@
-package br.lumago.solix.exceptions.newPayment
+package br.lumago.solix.exceptions.paymentHandler
 
 class NewPaymentGetException(message: String) : Exception(message)

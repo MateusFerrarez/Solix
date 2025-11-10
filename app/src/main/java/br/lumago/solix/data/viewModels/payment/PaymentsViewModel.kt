@@ -12,8 +12,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import br.lumago.solix.data.entities.relations.PaymentCard
 import br.lumago.solix.data.repositories.PaymentsRepository
-import br.lumago.solix.exceptions.payment.PaymentDeleteException
-import br.lumago.solix.exceptions.payment.PaymentGetException
+import br.lumago.solix.exceptions.payment.DeletePaymentException
+import br.lumago.solix.exceptions.payment.GetPaymentException
 import br.lumago.solix.exceptions.payment.PaymentSynchronizedException
 import br.lumago.solix.ui.paymentHandler.PaymentHandlerScreen
 import kotlinx.coroutines.FlowPreview
@@ -45,7 +45,7 @@ class PaymentsViewModel(
     var exception = MutableStateFlow<Exception?>(null)
         private set
 
-    //
+    // Search
     var searchValue = MutableStateFlow("")
         private set
     var queryValue = MutableStateFlow("%%")
@@ -92,7 +92,7 @@ class PaymentsViewModel(
                     .getPayments(query)
                     .cachedIn(viewModelScope)
             } catch (e: Exception) {
-                val customException = PaymentGetException(e.message!!)
+                val customException = GetPaymentException(e.message!!)
                 updateException(customException)
             }
         }
@@ -145,7 +145,7 @@ class PaymentsViewModel(
                 updateDialog(true)
                 getPayments(queryValue.value)
             } catch (e: Exception) {
-                val customException = PaymentDeleteException(e.message!!)
+                val customException = DeletePaymentException(e.message!!)
                 updateException(customException)
             }
         }
@@ -156,9 +156,13 @@ class PaymentsViewModel(
     ) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PaymentsViewModel(
-                repository
-            ) as T
+            if (modelClass.isAssignableFrom(PaymentsViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return PaymentsViewModel(
+                    repository
+                ) as T
+            }
+            throw IllegalArgumentException("Unkow model view ${modelClass.name}")
         }
     }
 }

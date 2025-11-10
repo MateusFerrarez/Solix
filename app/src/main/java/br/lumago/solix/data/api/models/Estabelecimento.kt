@@ -1,8 +1,5 @@
-package br.lumago.solix.data.entities
+package br.lumago.solix.data.api.models
 
-import br.lumago.solix.data.api.models.Cidade
-import br.lumago.solix.data.api.models.Estado
-import br.lumago.solix.data.api.models.InscricaoEstadual
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-package br.lumago.solix.data
+package br.lumago.solix.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

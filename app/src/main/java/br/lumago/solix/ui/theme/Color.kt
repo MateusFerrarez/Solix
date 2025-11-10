@@ -57,6 +57,14 @@ fun corBotao(): ButtonColors {
 }
 
 @Composable
+fun corBotaoNegativo(): ButtonColors {
+    return ButtonDefaults.buttonColors(
+        containerColor = Color.Gray,
+        contentColor = corBotao
+    )
+}
+
+@Composable
 fun corCard(): CardColors {
     return CardDefaults.cardColors(
         containerColor = Color.White

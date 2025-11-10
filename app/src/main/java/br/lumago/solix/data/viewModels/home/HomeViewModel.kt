@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.lumago.solix.ui.customers.CustomersScreen
 import br.lumago.solix.ui.payments.PaymentsScreen
+import br.lumago.solix.ui.sync.SyncScreen
 
 class HomeViewModel() : ViewModel() {
 
@@ -20,9 +21,19 @@ class HomeViewModel() : ViewModel() {
         activity.startActivity(activityCustomersScreen)
     }
 
+    fun openSyncScreen(activity: Activity) {
+        val activitySyncScreen = Intent(activity, SyncScreen::class.java)
+        activity.startActivity(activitySyncScreen)
+    }
+
     class HomeViewModelFactory() : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return HomeViewModel() as T
+            if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return HomeViewModel() as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
+
     }
 }

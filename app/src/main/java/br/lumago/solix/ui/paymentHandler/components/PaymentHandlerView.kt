@@ -19,7 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import br.lumago.solix.exceptions.handler.NewPaymentHandler
+import br.lumago.solix.exceptions.handler.PaymentHandlerExceptionHandler
 import br.lumago.solix.data.viewModels.payment.PaymentHandlerViewModel
 import br.lumago.solix.ui.utils.buttons.DefaultButton
 import br.lumago.solix.ui.utils.formatting.FormatDate
@@ -146,7 +146,8 @@ fun NewPayment(viewModel: PaymentHandlerViewModel) {
                     onlyNumbers = false,
                     onValueChange = { viewModel.updateObservation(it) },
                     widthPercentage = 0.99f,
-                    roundedPercentage = 10
+                    roundedPercentage = 10,
+                    singleLine = false
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -177,7 +178,7 @@ fun NewPayment(viewModel: PaymentHandlerViewModel) {
     if (exception != null) {
         StatusDialog(
             onClick = { viewModel.updateDialog(false) },
-            message = NewPaymentHandler(exception).formatException(),
+            message = PaymentHandlerExceptionHandler(exception).formatException(),
             isError = true
         )
     }
