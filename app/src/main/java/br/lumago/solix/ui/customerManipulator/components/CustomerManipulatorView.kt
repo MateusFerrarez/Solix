@@ -94,6 +94,7 @@ fun CustomerHandlerView(viewModel: CustomerHandlerViewModel) {
         }
     }
 
+    // UI
     Column(
         modifier = Modifier
             .background(Color.White)

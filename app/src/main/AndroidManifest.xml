@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Solix">
 
+        <activity android:name=".ui.map.MapScreen"
+            android:parentActivityName=".ui.home.HomeScreen"/>
+
         <activity android:name=".ui.sync.SyncScreen"
             android:parentActivityName=".ui.home.HomeScreen"/>
 

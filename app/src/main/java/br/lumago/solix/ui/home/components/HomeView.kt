@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.lumago.solix.data.viewModels.home.HomeViewModel
+import br.lumago.solix.ui.map.MapScreen
 import br.lumago.solix.ui.payments.PaymentsScreen
 import br.lumago.solix.ui.theme.bgHomeBrush
 import br.lumago.solix.ui.theme.corBotao
@@ -79,7 +80,10 @@ fun Home(viewModel: HomeViewModel) {
 
         ButtonHome(
             painter = rememberVectorPainter(Icons.Default.LocationOn),
-            onClick = {},
+            onClick = {
+                val activityIntent = Intent(activity, MapScreen::class.java)
+                activity.startActivity(activityIntent)
+            },
             text = "Mapa"
         )
 

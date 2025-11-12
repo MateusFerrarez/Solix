@@ -62,6 +62,7 @@ fun CustomersView(viewModel: CustomerViewModel) {
         }
     }
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()
