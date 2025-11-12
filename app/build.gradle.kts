@@ -68,4 +68,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.gson)
     implementation(libs.converter.gson)
+    implementation(libs.android.ndk27)
+    implementation(libs.maps.compose.ndk27)
 }

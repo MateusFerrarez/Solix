@@ -43,7 +43,7 @@ class CustomerHandlerViewModel(private val repository: CustomerRepository) : Vie
     //
     var exception = MutableStateFlow<Exception?>(null)
         private set
-    var statusButton = MutableStateFlow(true)
+    var buttonStatus = MutableStateFlow(true)
         private set
 
     // Dialogs
@@ -130,7 +130,7 @@ class CustomerHandlerViewModel(private val repository: CustomerRepository) : Vie
                 activity.finish()
             } catch (e: EmptyCustomerNameException) {
                 exception.update { e }
-                statusButton.update { true }
+                buttonStatus.update { true }
             } catch (e: Exception) {
                 exception.update { NewCustomerInsertException(e.toString()) }
             }
@@ -138,7 +138,7 @@ class CustomerHandlerViewModel(private val repository: CustomerRepository) : Vie
     }
 
     fun saveCustomer(activity: Activity) {
-        statusButton.update { false }
+        buttonStatus.update { false }
 
         if (customer.value == null) {
             insertCustomer(activity)
@@ -216,6 +216,10 @@ class CustomerHandlerViewModel(private val repository: CustomerRepository) : Vie
             razaoSocialValue.update { TextFieldValue(text = tempCustomer.razaoSocial) }
             if (tempCustomer.nomeFantasia != null) {
                 nomeFantasiaValue.update { TextFieldValue(text = tempCustomer.nomeFantasia!!) }
+            }
+
+            if (tempCustomer.synchronizedAt != null) {
+                buttonStatus.update { false }
             }
 
             zipCodeValue.update { TextFieldValue(text = tempAddress.zipCode) }
@@ -340,7 +344,7 @@ class CustomerHandlerViewModel(private val repository: CustomerRepository) : Vie
                 activity.finish()
             } catch (e: EmptyCustomerNameException) {
                 exception.update { e }
-                statusButton.update { true }
+                buttonStatus.update { true }
             } catch (e: Exception) {
                 exception.update { CustomerUpdateException(e.toString()) }
             }

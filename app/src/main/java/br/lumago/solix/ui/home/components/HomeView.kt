@@ -61,7 +61,7 @@ fun Home(viewModel: HomeViewModel) {
         Spacer(modifier = Modifier.height(55.dp))
 
         Text(
-            text = "Bem-vindo!",
+            text = "Solix\n",
             style = titleStyle,
             fontSize = 40.sp,
             color = Color.Black
@@ -93,7 +93,9 @@ fun Home(viewModel: HomeViewModel) {
 
         ButtonHome(
             painter = rememberVectorPainter(Icons.Default.Delete),
-            onClick = {},
+            onClick = {
+                viewModel.openCounterScreen(activity)
+            },
             text = "Contagens"
         )
 

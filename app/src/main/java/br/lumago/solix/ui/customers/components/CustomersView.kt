@@ -1,5 +1,6 @@
 package br.lumago.solix.ui.customers.components
 
+import android.content.Intent
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +28,7 @@ import br.lumago.solix.ui.utils.buttons.ActionButton
 import br.lumago.solix.ui.utils.components.CircleProgress
 import br.lumago.solix.ui.utils.components.DefaultSearchBar
 import br.lumago.solix.ui.utils.components.Header
+import br.lumago.solix.ui.utils.dialogs.ChooserDialog
 import br.lumago.solix.ui.utils.dialogs.StatusDialog
 
 @Composable
@@ -39,6 +41,7 @@ fun CustomersView(viewModel: CustomerViewModel) {
     val buscaBanco by viewModel.queryValue.collectAsState()
     //
     val showDialog = viewModel.showDialog.collectAsState().value
+    val showChooserDialog = viewModel.showChooserDialog.collectAsState().value
     val dialogMessage = viewModel.dialogMessage.collectAsState().value
     //
     val exception = viewModel.exception.collectAsState().value
@@ -95,8 +98,12 @@ fun CustomersView(viewModel: CustomerViewModel) {
                                             viewModel.openEditCustomerScreen(
                                                 activity,
                                                 launcher,
-                                                it.customerId
+                                                it.customerId,
+                                                it.isSync,
                                             )
+                                        },
+                                        onIconClick = {
+                                            viewModel.updateSelectedCustomer(it)
                                         }
                                     )
                                 }
@@ -133,7 +140,6 @@ fun CustomersView(viewModel: CustomerViewModel) {
                             }
                         }
                     }
-
                 }
             }
         }
@@ -165,6 +171,14 @@ fun CustomersView(viewModel: CustomerViewModel) {
             onClick = { viewModel.updateDialog(false) },
             message = dialogMessage,
             isError = false
+        )
+    }
+
+    if (showChooserDialog) {
+        ChooserDialog(
+            onDimissClick = { viewModel.updateChooserDialog(false) },
+            onPositiveClick = { viewModel.deleteCustomerById() },
+            message = "Deseja mesmo excluir cliente?"
         )
     }
 }

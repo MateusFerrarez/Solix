@@ -118,4 +118,7 @@ interface CustomersDao {
     // Delete
     @Query("""DELETE FROM ADDRESSES""")
     suspend fun deleteAllAddresses()
+
+    @Query("""DELETE FROM Customers WHERE CUSTOMER_ID = :customerId""")
+    suspend fun deleteCustomerById(customerId: Long)
 }

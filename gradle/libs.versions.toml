@@ -1,5 +1,6 @@
 [versions]
 agp = "8.12.3"
+androidNdk27 = "11.16.2"
 converterGson = "3.0.0"
 converterScalars = "3.0.0"
 gson = "2.13.2"
@@ -12,6 +13,7 @@ kotlinxSerializationJson = "1.9.0"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
+mapsComposeNdk27 = "11.16.2"
 okhttp = "5.3.0"
 pagingCompose = "3.3.6"
 pagingRuntime = "3.3.6"
@@ -21,6 +23,7 @@ roomCompiler = "2.8.3"
 roomRuntime = "2.8.3"
 
 [libraries]
+android-ndk27 = { module = "com.mapbox.maps:android-ndk27", version.ref = "androidNdk27" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
@@ -45,6 +48,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+maps-compose-ndk27 = { module = "com.mapbox.extension:maps-compose-ndk27", version.ref = "mapsComposeNdk27" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }

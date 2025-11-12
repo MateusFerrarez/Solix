@@ -71,4 +71,11 @@ class CustomerRepository(context: Context) {
             address
         )
     }
+
+    // Delete
+    suspend fun deleteCustomerById(
+        customerId: Long
+    ){
+        customerDao.deleteCustomerById(customerId)
+    }
 }

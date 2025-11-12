@@ -43,8 +43,6 @@ abstract class AppDatabase : RoomDatabase() {
                         super.onCreate(db)
                         db.execSQL(MockSchema.INSERT_GROUP.trimIndent())
                         db.execSQL(MockSchema.INSERT_ENTERPRISE.trimIndent())
-                        db.execSQL(MockSchema.INSERT_CUSTOMER.trimIndent())
-                        db.execSQL(MockSchema.INSERT_CUSTOMER_2.trimIndent())
                     }
                 }
                 ).build()

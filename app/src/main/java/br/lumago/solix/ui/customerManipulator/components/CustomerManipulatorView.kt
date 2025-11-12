@@ -1,4 +1,4 @@
-package br.lumago.solix.ui.customerHandler.components
+package br.lumago.solix.ui.customerManipulator.components
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
@@ -47,10 +47,15 @@ fun CustomerHandlerView(viewModel: CustomerHandlerViewModel) {
     val activity = LocalActivity.current!!
     // Extra
     val customerIdExtra = activity.intent.getLongExtra("customerId", 0L)
+    val isSynchronizedExtra = activity.intent.getBooleanExtra("isSynchronized", false)
     //
-    val title = when (customerIdExtra) {
-        0L -> "Novo cliente"
+    var title = when (customerIdExtra) {
+        0L -> "Novo Cliente"
         else -> "Editar cliente"
+    }
+
+    if (isSynchronizedExtra) {
+        title = "Modo consulta"
     }
     // Dialogs
     val exception = viewModel.exception.collectAsState().value
@@ -84,7 +89,7 @@ fun CustomerHandlerView(viewModel: CustomerHandlerViewModel) {
     }
 
     LaunchedEffect(Unit) {
-        if (customerIdExtra != 0L){
+        if (customerIdExtra != 0L) {
             viewModel.getCustomerById(customerIdExtra)
         }
     }

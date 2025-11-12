@@ -1,4 +1,4 @@
-package br.lumago.solix.ui.customerHandler.components
+package br.lumago.solix.ui.customerManipulator.components
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
@@ -31,7 +31,7 @@ fun ContactView(viewModel: CustomerHandlerViewModel) {
     val email1Value = viewModel.email1Value.collectAsState().value
     val email2Value = viewModel.email2Value.collectAsState().value
     //
-    val enableButton = viewModel.statusButton.collectAsState().value
+    val buttonStatus = viewModel.buttonStatus.collectAsState().value
 
     // UI
     Column(
@@ -104,7 +104,7 @@ fun ContactView(viewModel: CustomerHandlerViewModel) {
                         viewModel.saveCustomer(activity = activity)
                     },
                     text = "Gravar",
-                    isEnable = enableButton
+                    isEnable = buttonStatus
                 )
             }
         }

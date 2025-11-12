@@ -11,14 +11,16 @@ import br.lumago.solix.ui.sync.SyncScreen
 class HomeViewModel() : ViewModel() {
 
     // Open
+    fun openCustomersScreen(activity: Activity){
+        val activityCustomersScreen = Intent(activity, CustomersScreen::class.java)
+        activity.startActivity(activityCustomersScreen)
+    }
     fun openPaymentsScreen(activity: Activity) {
         val activityPaymentsScreen = Intent(activity, PaymentsScreen::class.java)
         activity.startActivity(activityPaymentsScreen)
     }
 
-    fun openCustomersScreen(activity: Activity){
-        val activityCustomersScreen = Intent(activity, CustomersScreen::class.java)
-        activity.startActivity(activityCustomersScreen)
+    fun openCounterScreen(activity: Activity) {
     }
 
     fun openSyncScreen(activity: Activity) {
