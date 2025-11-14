@@ -23,9 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.lumago.solix.R
 import br.lumago.solix.data.viewModels.home.HomeViewModel
 import br.lumago.solix.ui.map.MapScreen
 import br.lumago.solix.ui.payments.PaymentsScreen
@@ -71,7 +74,7 @@ fun Home(viewModel: HomeViewModel) {
         Spacer(modifier = Modifier.height(25.dp))
 
         ButtonHome(
-            painter = rememberVectorPainter(Icons.Default.Person),
+            painter = ImageVector.vectorResource(R.drawable.user_icon),
             onClick = {
                 viewModel.openCustomersScreen(activity)
             },
@@ -79,16 +82,15 @@ fun Home(viewModel: HomeViewModel) {
         )
 
         ButtonHome(
-            painter = rememberVectorPainter(Icons.Default.LocationOn),
+            painter = ImageVector.vectorResource(R.drawable.map_icon),
             onClick = {
-                val activityIntent = Intent(activity, MapScreen::class.java)
-                activity.startActivity(activityIntent)
+                viewModel.openMapScreen(activity)
             },
             text = "Mapa"
         )
 
         ButtonHome(
-            painter = rememberVectorPainter(Icons.Default.Person),
+            painter = ImageVector.vectorResource(R.drawable.payment_icon),
             onClick = {
                 viewModel.openPaymentsScreen(activity)
             },
@@ -96,7 +98,7 @@ fun Home(viewModel: HomeViewModel) {
         )
 
         ButtonHome(
-            painter = rememberVectorPainter(Icons.Default.Delete),
+            painter = ImageVector.vectorResource(R.drawable.bar_code_icon),
             onClick = {
                 viewModel.openCounterScreen(activity)
             },
@@ -104,7 +106,7 @@ fun Home(viewModel: HomeViewModel) {
         )
 
         ButtonHome(
-            painter = rememberVectorPainter(Icons.Default.Delete),
+            painter = ImageVector.vectorResource(R.drawable.sync_icon),
             onClick = {
                 viewModel.openSyncScreen(activity)
             },

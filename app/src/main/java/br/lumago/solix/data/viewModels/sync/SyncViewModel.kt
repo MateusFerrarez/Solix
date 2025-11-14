@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import br.lumago.solix.data.handlers.CustomerSyncHandler
+import br.lumago.solix.data.handlers.ProductSyncHandler
 import br.lumago.solix.data.repositories.CustomerRepository
+import br.lumago.solix.data.repositories.ProductsRepository
 import br.lumago.solix.exceptions.sync.SyncCustomerException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -47,7 +49,10 @@ class SyncViewModel : ViewModel() {
                 currentSyncStatus.update { SyncStatus.Loading("Lendo clientes...") }
                 syncCustomers(context)
                 delay(1500L)
-                progressBarValue.update { 0.25f }
+                progressBarValue.update { 0.4f }
+                syncProducts(context)
+                delay(1500L)
+                progressBarValue.update { 1f }
                 finishSync()
             } catch (e: Exception) {
                 exception.update { e }
@@ -73,7 +78,20 @@ class SyncViewModel : ViewModel() {
     }
 
     private suspend fun syncProducts(context: Context){
-
+        try {
+            val handler = ProductSyncHandler(
+                ProductsRepository(
+                    context
+                ),
+                currentSyncStatus
+            )
+            handler.startSync(LocalDateTime.now().toString())
+            delay(3500L)
+            currentSyncStatus.update { SyncStatus.Loading("Leitura de produtos finalizada...") }
+        } catch (e: Exception) {
+            currentSyncStatus.update { SyncStatus.Error("Erro ao sincronizar produtos!") }
+            throw SyncCustomerException(e.message!!)
+        }
     }
 
     private suspend fun finishSync() {

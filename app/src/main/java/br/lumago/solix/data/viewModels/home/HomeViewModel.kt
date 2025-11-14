@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import br.lumago.solix.ui.counter.CounterScreen
 import br.lumago.solix.ui.customers.CustomersScreen
+import br.lumago.solix.ui.map.MapScreen
 import br.lumago.solix.ui.payments.PaymentsScreen
 import br.lumago.solix.ui.sync.SyncScreen
 
@@ -21,6 +23,13 @@ class HomeViewModel() : ViewModel() {
     }
 
     fun openCounterScreen(activity: Activity) {
+        val activityCounterScreen = Intent(activity, CounterScreen::class.java)
+        activity.startActivity(activityCounterScreen)
+    }
+
+    fun openMapScreen(activity: Activity){
+        val activityMapScreen = Intent(activity, MapScreen::class.java)
+        activity.startActivity(activityMapScreen)
     }
 
     fun openSyncScreen(activity: Activity) {

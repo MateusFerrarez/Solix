@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import br.lumago.solix.data.viewModels.customer.CustomerHandlerViewModel
-import br.lumago.solix.exceptions.handler.CustomerHandlerExceptionHandler
+import br.lumago.solix.exceptions.handler.CustomerManipulatorExceptionHandler
 import br.lumago.solix.ui.theme.boldStyle
 import br.lumago.solix.ui.theme.corTexto
 import br.lumago.solix.ui.utils.components.Header
@@ -78,13 +78,13 @@ fun CustomerHandlerView(viewModel: CustomerHandlerViewModel) {
     }
 
     if (exception != null) {
-        CustomerHandlerExceptionHandler(exception).saveLog(activity)
+        CustomerManipulatorExceptionHandler(exception).saveLog(activity)
         StatusDialog(
             onClick = {
                 viewModel.updateException(null)
             },
             isError = true,
-            message = CustomerHandlerExceptionHandler(exception).formatException()
+            message = CustomerManipulatorExceptionHandler(exception).formatException()
         )
     }
 

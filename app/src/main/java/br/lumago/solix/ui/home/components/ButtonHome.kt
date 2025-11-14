@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.lumago.solix.ui.theme.corFundoCard
@@ -26,7 +27,7 @@ import br.lumago.solix.ui.theme.titleStyle
 
 @Composable
 fun ButtonHome(
-    painter: Painter,
+    painter: ImageVector,
     text: String,
     onClick: () -> Unit
 ) {
@@ -45,7 +46,7 @@ fun ButtonHome(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painter,
+                imageVector = painter,
                 contentDescription = "",
                 modifier = Modifier.size(30.dp),
                 tint = Color.Black

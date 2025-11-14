@@ -15,7 +15,7 @@ import br.lumago.solix.data.repositories.PaymentsRepository
 import br.lumago.solix.exceptions.payment.DeletePaymentException
 import br.lumago.solix.exceptions.payment.GetPaymentException
 import br.lumago.solix.exceptions.payment.PaymentSynchronizedException
-import br.lumago.solix.ui.paymentHandler.PaymentHandlerScreen
+import br.lumago.solix.ui.paymentManipulator.PaymentManipulatorScreen
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,8 +70,8 @@ class PaymentsViewModel(
         launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
         activity: Activity
     ) {
-        val paymentHandlerScreen = Intent(activity, PaymentHandlerScreen::class.java)
-        launcher.launch(paymentHandlerScreen)
+        val paymentManipulatorScreen = Intent(activity, PaymentManipulatorScreen::class.java)
+        launcher.launch(paymentManipulatorScreen)
     }
 
     fun openEditPaymentScreen(
@@ -79,7 +79,7 @@ class PaymentsViewModel(
         activity: Activity,
         paymentId: Long
     ) {
-        val editPaymentScreen = Intent(activity, PaymentHandlerScreen::class.java)
+        val editPaymentScreen = Intent(activity, PaymentManipulatorScreen::class.java)
         editPaymentScreen.putExtra("paymentId", paymentId)
         launcher.launch(editPaymentScreen)
     }

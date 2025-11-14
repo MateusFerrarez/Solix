@@ -1,6 +1,8 @@
-package br.lumago.solix.ui.paymentHandler.components
+package br.lumago.solix.ui.paymentManipulator.components
 
 import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,8 +21,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import br.lumago.solix.exceptions.handler.PaymentHandlerExceptionHandler
-import br.lumago.solix.data.viewModels.payment.PaymentHandlerViewModel
+import br.lumago.solix.data.entities.relations.CustomerSelected
+import br.lumago.solix.exceptions.handler.PaymentManipulatorExceptionHandler
+import br.lumago.solix.data.viewModels.payment.PaymentManipulatorViewModel
+import br.lumago.solix.ui.utils.LogManager
 import br.lumago.solix.ui.utils.buttons.DefaultButton
 import br.lumago.solix.ui.utils.formatting.FormatDate
 import br.lumago.solix.ui.utils.components.Header
@@ -29,9 +33,10 @@ import br.lumago.solix.ui.utils.components.TextWithButton
 import br.lumago.solix.ui.utils.components.TextWithDatePicker
 import br.lumago.solix.ui.utils.components.TextWithTextField
 import br.lumago.solix.ui.utils.dialogs.StatusDialog
+import kotlinx.coroutines.delay
 
 @Composable
-fun NewPayment(viewModel: PaymentHandlerViewModel) {
+fun NewPayment(viewModel: PaymentManipulatorViewModel) {
     val activity = LocalActivity.current!!
     val title = viewModel.title
     // Objects
@@ -50,6 +55,25 @@ fun NewPayment(viewModel: PaymentHandlerViewModel) {
     // Progress
     val showProgress = viewModel.showProgress
 
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        when (result.resultCode) {
+            1, 2 -> {
+                val tempPerson = CustomerSelected(
+                    customer = result.data?.getStringExtra("selectedCustomer")!!,
+                    customerId = result.data?.getLongExtra("localCustomerId", 0L)!!
+                )
+
+                if (result.resultCode == 2) {
+                    viewModel.updateSelectedIndicator(tempPerson)
+                } else {
+                    viewModel.updateSelectedCustomer(tempPerson)
+                }
+            }
+        }
+    }
+
     LaunchedEffect(Unit) {
         if (paymentIdExtra != 0L && customerSelected == null) {
             viewModel.getPaymentById(
@@ -57,7 +81,8 @@ fun NewPayment(viewModel: PaymentHandlerViewModel) {
                 activity
             )
         } else {
-            viewModel.mock()
+            delay(350)
+            viewModel.updateProgress(false)
         }
     }
 
@@ -89,7 +114,12 @@ fun NewPayment(viewModel: PaymentHandlerViewModel) {
                     text = "Cliente:",
                     buttonText = customerSelected?.customer,
                     widthPercentage = 0.99f,
-                    onClick = {}
+                    onClick = {
+                        viewModel.openCustomerScreen(
+                            activity,
+                            launcher
+                        )
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -98,7 +128,12 @@ fun NewPayment(viewModel: PaymentHandlerViewModel) {
                     text = "Indicação:",
                     buttonText = indicatorSelected?.customer,
                     widthPercentage = 0.99f,
-                    onClick = {}
+                    onClick = {
+                        viewModel.openIndicatorScreen(
+                            activity,
+                            launcher
+                        )
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -107,6 +142,7 @@ fun NewPayment(viewModel: PaymentHandlerViewModel) {
                     text = "Valor da mensalidade:",
                     value = paymentField,
                     onlyNumbers = true,
+                    formatNumber = true,
                     onValueChange = { viewModel.updatePaymentValue(it) },
                     widthPercentage = 0.50f
                 )
@@ -176,9 +212,10 @@ fun NewPayment(viewModel: PaymentHandlerViewModel) {
     }
 
     if (exception != null) {
+        LogManager(activity).createLog(exception)
         StatusDialog(
             onClick = { viewModel.updateDialog(false) },
-            message = PaymentHandlerExceptionHandler(exception).formatException(),
+            message = PaymentManipulatorExceptionHandler(exception).formatException(),
             isError = true
         )
     }

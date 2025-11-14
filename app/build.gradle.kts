@@ -61,6 +61,7 @@ dependencies {
     implementation (libs.androidx.paging.runtime)
     implementation (libs.androidx.room.paging)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
@@ -70,4 +71,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.android.ndk27)
     implementation(libs.maps.compose.ndk27)
+    implementation (libs.play.services.vision)
+    implementation (libs.play.services.vision.common)
+    implementation (libs.accompanist.permissions)
 }

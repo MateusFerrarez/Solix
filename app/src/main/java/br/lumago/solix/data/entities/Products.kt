@@ -24,10 +24,10 @@ import androidx.room.PrimaryKey
     ]
 )
 data class Products(
-    @ColumnInfo(name = "product_id") @PrimaryKey(autoGenerate = true) val productId: Long = 0,
-    @ColumnInfo(name = "enterprise_id") val enterpriseId: Long,
-    @ColumnInfo(name = "partner_id") val partnerId: Long,
-    @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "barcode") val barcode: String,
-    @ColumnInfo(name = "created_at") val createdAt: String
+    @ColumnInfo(name = "product_id") @PrimaryKey(autoGenerate = true) var productId: Long = 0,
+    @ColumnInfo(name = "enterprise_id") val enterpriseId: Long = 1L,
+    @ColumnInfo(name = "partner_id") var partnerId: Long = 1L,
+    @ColumnInfo(name = "name") var name: String = "",
+    @ColumnInfo(name = "barcode") var barcode: String = "",
+    @ColumnInfo(name = "created_at", defaultValue = "CURRENT_TIMESTAMP") val createdAt: String? = null,
 )

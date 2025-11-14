@@ -11,13 +11,14 @@ import androidx.room.Upsert
 import br.lumago.solix.data.entities.Addresses
 import br.lumago.solix.data.entities.Customers
 import br.lumago.solix.data.entities.relations.CustomerCard
+import br.lumago.solix.data.entities.relations.CustomerPosition
 import br.lumago.solix.data.entities.relations.CustomerSelected
 
 @Dao
 interface CustomersDao {
 
     // Insert
-    @Upsert()
+    @Insert()
     fun insertCustomers(customers: List<Customers>): List<Long>
 
     @Insert
@@ -61,6 +62,13 @@ interface CustomersDao {
     )
     suspend fun getCustomerSelectedByPaymentId(paymentId: Long): CustomerSelected
 
+    @Query("""SELECT C.CUSTOMER_ID
+        FROM CUSTOMERS C
+        WHERE C.partner_id = :partnerId
+        AND C.enterprise_id = 1
+    """)
+    suspend fun getCustomerId(partnerId: Long): Long?
+
     @Query(
         """ SELECT C.CUSTOMER_ID as customerId, C.partner_id as partnerId, C.razao_social as customerName,
         ad.street || ', ' || ad.number || ' - ' ||ad.neighborhood as address,
@@ -68,6 +76,7 @@ interface CustomersDao {
         FROM CUSTOMERS C
         INNER JOIN addresses ad on ad.customer_id = C.customer_id
         WHERE (:query = '%%' OR C.razao_social LIKE :query OR C.nome_fantasia LIKE :query OR C.partner_id LIKE :query)
+        ORDER BY C.razao_social ASC
     """
     )
     fun getCustomers(query: String): PagingSource<Int, CustomerCard>
@@ -90,6 +99,13 @@ interface CustomersDao {
     """
     )
     suspend fun getIndicatorSelectedByPaymentId(paymentId: Long): CustomerSelected?
+
+    @Query("""SELECT C.razao_social AS name, AD.latitude AS latitude, AD.longitude AS longitude
+        FROM Addresses ad
+        INNER JOIN Customers C ON AD.CUSTOMER_ID = C.CUSTOMER_ID
+        WHERE AD.latitude IS NOT NULL AND AD.longitude IS NOT NULL
+    """)
+    suspend fun getCustomersPositions() : List<CustomerPosition>
 
     @Query(
         """SELECT SEQ + 1

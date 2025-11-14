@@ -40,6 +40,8 @@ fun CustomersView(viewModel: CustomerViewModel) {
     val busca by viewModel.searchValue.collectAsState()
     val buscaBanco by viewModel.queryValue.collectAsState()
     //
+    val callerClassExtra = activity.intent.getStringExtra("callerClass")
+    //
     val showDialog = viewModel.showDialog.collectAsState().value
     val showChooserDialog = viewModel.showChooserDialog.collectAsState().value
     val dialogMessage = viewModel.dialogMessage.collectAsState().value
@@ -99,8 +101,8 @@ fun CustomersView(viewModel: CustomerViewModel) {
                                             viewModel.openEditCustomerScreen(
                                                 activity,
                                                 launcher,
-                                                it.customerId,
-                                                it.isSync,
+                                                it,
+                                                callerClassExtra
                                             )
                                         },
                                         onIconClick = {

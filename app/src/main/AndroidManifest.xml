@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +18,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Solix">
+
+        <activity android:name=".ui.barcodeReader.BarcodeReaderScreen"
+            android:exported="true"
+            android:parentActivityName=".ui.newCounter.NewCounterScreen"
+            android:theme="@style/Theme.Solix" />
+
+        <activity android:name=".ui.newCounter.NewCounterScreen"
+            android:parentActivityName=".ui.counter.CounterScreen"/>
+
+        <activity android:name=".ui.counter.CounterScreen"
+            android:parentActivityName=".ui.home.HomeScreen"/>
 
         <activity android:name=".ui.map.MapScreen"
             android:parentActivityName=".ui.home.HomeScreen"/>
@@ -30,7 +45,7 @@
             android:parentActivityName=".ui.home.HomeScreen" />
 
         <activity
-            android:name=".ui.paymentHandler.PaymentHandlerScreen"
+            android:name=".ui.paymentManipulator.PaymentManipulatorScreen"
             android:exported="true"
             android:parentActivityName=".ui.payments.PaymentsScreen"
             android:theme="@style/Theme.Solix" />

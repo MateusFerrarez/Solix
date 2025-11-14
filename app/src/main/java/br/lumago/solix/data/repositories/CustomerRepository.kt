@@ -8,6 +8,7 @@ import br.lumago.solix.data.database.AppDatabase
 import br.lumago.solix.data.entities.Addresses
 import br.lumago.solix.data.entities.Customers
 import br.lumago.solix.data.entities.relations.CustomerCard
+import br.lumago.solix.data.entities.relations.CustomerPosition
 import br.lumago.solix.data.paging.DelayedCustomersPagingSource
 import kotlinx.coroutines.flow.Flow
 
@@ -26,16 +27,21 @@ class CustomerRepository(context: Context) {
     }
 
     suspend fun insertCustomerAndAddress(
-        customer: Customers,
-        address: Addresses
+        customers: Customers,
+        addresses: Addresses
     ) {
         customerDao.insertCustomerAndAddress(
-            customer,
-            address
+            customers,
+            addresses
         )
     }
 
+
     // Get
+    suspend fun getCustomerId(partnerId: Long): Long? {
+        return customerDao.getCustomerId(partnerId)
+    }
+
     fun getCustomers(query: String): Flow<PagingData<CustomerCard>> = Pager(
         config = PagingConfig(
             pageSize = 15,
@@ -61,6 +67,10 @@ class CustomerRepository(context: Context) {
         return customerDao.getNextCustomerId()
     }
 
+    suspend fun getCustomersPositions(): List<CustomerPosition> {
+        return customerDao.getCustomersPositions()
+    }
+
     // Update
     suspend fun updateCustomerAndAddress(
         customer: Customers,
@@ -75,7 +85,7 @@ class CustomerRepository(context: Context) {
     // Delete
     suspend fun deleteCustomerById(
         customerId: Long
-    ){
+    ) {
         customerDao.deleteCustomerById(customerId)
     }
 }

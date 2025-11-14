@@ -1,5 +1,6 @@
 package br.lumago.solix.data.handlers
 
+import android.util.Log
 import br.lumago.solix.data.adapters.AddressFirebaseAdapter
 import br.lumago.solix.data.adapters.CustomerFirebaseAdapter
 import br.lumago.solix.data.adapters.fromJson
@@ -27,7 +28,18 @@ class CustomerSyncHandler(
                     "cnpj_cpf": "12345678900",
                     "id_parceiro": "1",
                     "razao_social": "Tech Solutions LTDA",
-                    "fantasia": "TechSol"
+                    "fantasia": "TechSol",
+                    "endereco" : {
+                        "bairro": "SOA DOMINGOS 2",
+                        "cep": "13734284",
+                        "cidade": "MOCOCA",
+                        "complemento": "CASA MARROM",
+                        "logradouro" : "RUA DOS JOAO",
+                        "numero" : "45",
+                        "uf" : "SP",
+                        "latitude" : -21.469016468693095,
+                        "longitude" : -47.00480243859147
+                    }
                 }
             """.trimIndent()
             ),
@@ -37,36 +49,18 @@ class CustomerSyncHandler(
                     "cnpj_cpf": "156",
                     "id_parceiro": "31",
                     "razao_social": "COCA COLA",
-                    "fantasia": "COCA COLA 2"
-                }
-            """.trimIndent()
-            )
-        )
-
-        val addressJsonList = listOf(
-            JSONObject(
-                """
-                {
-                    "bairro": "SOA DOMINGOS",
-                    "cep": "13733000",
-                    "cidade": "MOCOCA",
-                    "complemento": "CASA VERDE",
-                    "logradouro" : "RUA DOS VIVOS",
-                    "numero" : "4564",
-                    "uf" : "SP"
-                }
-            """.trimIndent()
-            ),
-            JSONObject(
-                """
-                {
-                    "bairro": "SOA DOMINGOS 2",
-                    "cep": "13734284",
-                    "cidade": "MOCOCA",
-                    "complemento": "CASA MARROM",
-                    "logradouro" : "RUA DOS JOAO",
-                    "numero" : "45",
-                    "uf" : "SP"
+                    "fantasia": "COCA COLA 2",
+                    "endereco" : {
+                        "bairro": "SOA DOMINGOS",
+                        "cep": "13734284",
+                        "cidade": "SAO JOAO DA BOA VISTA",
+                        "complemento": "CASA MARROM",
+                        "logradouro" : "RUA DOS JOAO",
+                        "numero" : "45",
+                        "uf" : "SP",
+                        "latitude" : "-21.468112779155753",
+                        "longitude" : "-47.00457105244086"
+                    }
                 }
             """.trimIndent()
             )
@@ -81,28 +75,41 @@ class CustomerSyncHandler(
             val jobs = customerJsonList.map { json ->
                 async {
                     val extractedCustomerJson = customerAdapter.fromJson<Customers>(json)
-                    extractedCustomerJson.synchronizedAt = syncDate
-                    customersList.add(extractedCustomerJson)
-                }
-            }
-
-            jobs.awaitAll()
-
-            val jobsAddress = addressJsonList.map { json ->
-                async {
                     val extractedAddressJson = addressAdapter.fromJson<Addresses>(json)
+                    extractedCustomerJson.synchronizedAt = syncDate
+
+                    val tempCustomerId =
+                        repository.getCustomerId(extractedCustomerJson.partnerId!!.toLong())
+
+                    if (tempCustomerId != null) {
+                        extractedCustomerJson.customerId = tempCustomerId
+                        extractedAddressJson.customerId = tempCustomerId
+                    }
+
+                    customersList.add(extractedCustomerJson)
                     addressesList.add(extractedAddressJson)
                 }
             }
+            jobs.awaitAll()
 
-            jobsAddress.awaitAll()
+            val dbProcess = customersList.mapIndexed { index,  customer ->
+                async {
+                    if (customer.customerId != 0L) {
+                        repository.updateCustomerAndAddress(
+                            customer,
+                            addressesList[index]
+                        )
+                    } else {
+                        repository.insertCustomerAndAddress(
+                            customer,
+                            addressesList[index]
+                        )
+                    }
+                }
+            }
+            dbProcess.awaitAll()
         }
 
         currentSyncStatus.update { SyncStatus.Loading("Gravando registros dos clientes...") }
-
-        repository.insertCustomersAndAddress(
-            customersList,
-            addressesList
-        )
     }
 }

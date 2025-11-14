@@ -8,7 +8,7 @@ data class Estabelecimento (
     @SerializedName("cnpj")
     val cnpj: String,
     @SerializedName("nome_fantasia")
-    val nomeFantasia: String,
+    val nomeFantasia: String?,
     @SerializedName("tipo_logradouro")
     val tipoLogradouro: String,
     @SerializedName("logradouro")
@@ -16,7 +16,7 @@ data class Estabelecimento (
     @SerializedName("numero")
     val numero: String,
     @SerializedName("complemento")
-    val complemento: String,
+    val complemento: String?,
     @SerializedName("bairro")
     val bairro: String,
     @SerializedName("cep")

@@ -1,5 +1,6 @@
 package br.lumago.solix.ui.utils.dialogs
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -75,6 +76,7 @@ fun CnpjAPiDialog(
                 Spacer(modifier = Modifier.height(15.dp))
 
                 if (customerResponse != null) {
+                    Log.d("--- DEV", "CnpjAPiDialog: $customerResponse")
                     val endereco =
                         "${customerResponse.estabelecimento.tipoLogradouro} ${customerResponse.estabelecimento.logradouro}, ${customerResponse.estabelecimento.numero}"
 
@@ -106,7 +108,7 @@ fun CnpjAPiDialog(
                         Spacer(modifier = Modifier.width(2.dp))
 
                         Text(
-                            text = customerResponse.estabelecimento.nomeFantasia,
+                            text = customerResponse.estabelecimento.nomeFantasia?: "",
                             style = normalStyle,
                             fontSize = 13.sp,
                         )

@@ -6,7 +6,7 @@ import br.lumago.solix.exceptions.customerHandler.EmptyCustomerNameException
 import br.lumago.solix.exceptions.customerHandler.NewCustomerInsertException
 import br.lumago.solix.ui.utils.LogManager
 
-class CustomerHandlerExceptionHandler(override val exception: Exception) : ExceptionHandler() {
+class CustomerManipulatorExceptionHandler(override val exception: Exception) : ExceptionHandler() {
     override fun formatException(): String {
         val formattedException = when(exception){
             is NewCustomerInsertException -> "Erro ao salvar cliente!"

@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,11 +16,15 @@ import androidx.lifecycle.viewModelScope
 import br.lumago.solix.data.entities.Payments
 import br.lumago.solix.data.entities.relations.CustomerSelected
 import br.lumago.solix.data.repositories.PaymentsRepository
+import br.lumago.solix.exceptions.paymentHandler.EmptyCustomerException
+import br.lumago.solix.exceptions.paymentHandler.InvalidDateException
 import br.lumago.solix.exceptions.paymentHandler.NewPaymentGetException
 import br.lumago.solix.exceptions.paymentHandler.NewPaymentInsertException
 import br.lumago.solix.exceptions.paymentHandler.NewPaymentUpdateException
+import br.lumago.solix.ui.customers.CustomersScreen
 import br.lumago.solix.ui.utils.LogManager
 import br.lumago.solix.ui.utils.formatting.FormatCurrency
+import com.mapbox.maps.logD
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +34,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-class PaymentHandlerViewModel(private val repository: PaymentsRepository) : ViewModel() {
+class PaymentManipulatorViewModel(private val repository: PaymentsRepository) : ViewModel() {
     private var payment: Payments? = null
     var title by mutableStateOf("Nova mensalidade")
         private set
@@ -66,14 +72,23 @@ class PaymentHandlerViewModel(private val repository: PaymentsRepository) : View
         private set
 
 
-    suspend fun mock() {
-        customerSelected.value = CustomerSelected(
-            "11 - MATEUS TESTE DE LARGURA DO CARD PARA VERIFICAR O TAMANHO DO OVERFLOX",
-            1L
-        )
-        indicatorSelected.value = CustomerSelected("12 - MATEUS TESTE 2", 2L)
-        delay(600)
-        showProgress = false
+    // Open
+    fun openCustomerScreen(
+        activity: Activity,
+        launcher: ActivityResultLauncher<Intent>
+    ) {
+        val customerIntent = Intent(activity, CustomersScreen::class.java)
+        customerIntent.putExtra("callerClass", "customer")
+        launcher.launch(customerIntent)
+    }
+
+    fun openIndicatorScreen(
+        activity: Activity,
+        launcher: ActivityResultLauncher<Intent>
+    ) {
+        val customerIntent = Intent(activity, CustomersScreen::class.java)
+        customerIntent.putExtra("callerClass", "indicator")
+        launcher.launch(customerIntent)
     }
 
     // Insert
@@ -86,6 +101,8 @@ class PaymentHandlerViewModel(private val repository: PaymentsRepository) : View
                     .replace(",", ".")
                     .trim()
                     .toDouble()
+
+                checkInfo()
 
                 payment = Payments(
                     paymentId = 0L,
@@ -105,9 +122,7 @@ class PaymentHandlerViewModel(private val repository: PaymentsRepository) : View
                 activity.setResult(1)
                 activity.finish()
             } catch (e: Exception) {
-                val customException = NewPaymentInsertException(e.message!!)
-                LogManager(activity).createLog(customException)
-                updateException(customException)
+                updateException(e)
             }
         }
     }
@@ -117,6 +132,20 @@ class PaymentHandlerViewModel(private val repository: PaymentsRepository) : View
             insertPayment(activity)
         } else {
             updatePayment(activity)
+        }
+    }
+
+    private fun checkInfo() {
+        if (customerSelected.value == null) {
+            throw EmptyCustomerException("É necessário informar o cliente!")
+        }
+
+        if (contractDate.value.isBefore(LocalDate.now())) {
+            throw InvalidDateException("A data de contratação não pode ser anterior a data atual")
+        }
+
+        if (dueDate.value.isBefore(LocalDate.now())) {
+            throw InvalidDateException("A data de vencimento não pode ser anterior a data atual")
         }
     }
 
@@ -208,6 +237,18 @@ class PaymentHandlerViewModel(private val repository: PaymentsRepository) : View
         contractDate.value = tempDate
     }
 
+    fun updateSelectedCustomer(tempCustomer: CustomerSelected?) {
+        customerSelected.update { tempCustomer }
+    }
+
+    fun updateSelectedIndicator(tempIndicator: CustomerSelected?) {
+        indicatorSelected.update { tempIndicator }
+    }
+
+    fun updateProgress(value: Boolean) {
+        showProgress = value
+    }
+
     fun updatePayment(activity: Activity) {
         viewModelScope.launch {
             try {
@@ -217,6 +258,8 @@ class PaymentHandlerViewModel(private val repository: PaymentsRepository) : View
                     .replace(",", ".")
                     .trim()
                     .toDouble()
+
+                checkInfo()
 
                 payment!!.customerId = customerSelected.value!!.customerId
                 payment!!.indicatorId = indicatorSelected.value?.customerId
@@ -240,7 +283,7 @@ class PaymentHandlerViewModel(private val repository: PaymentsRepository) : View
     class NewPaymentViewModelFactory(private val repository: PaymentsRepository) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PaymentHandlerViewModel(repository) as T
+            return PaymentManipulatorViewModel(repository) as T
         }
     }
 }

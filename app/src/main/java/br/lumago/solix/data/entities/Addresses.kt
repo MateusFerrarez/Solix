@@ -32,7 +32,7 @@ data class Addresses(
     @ColumnInfo(name = "number_2") var number2: String = "",
     @ColumnInfo(name = "email_1") var email1: String = "",
     @ColumnInfo(name = "email_2") var email2: String = "",
-    @ColumnInfo(name = "latitude") val latitude: Float = 0f,
-    @ColumnInfo(name = "longitude") val longitude: Float = 0f,
+    @ColumnInfo(name = "latitude") var latitude: String = "",
+    @ColumnInfo(name = "longitude") var longitude: String = "",
     @ColumnInfo(name = "created_at", defaultValue = "CURRENT_TIMESTAMP") val createdAt: String? = null,
 )

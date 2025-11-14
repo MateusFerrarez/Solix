@@ -117,8 +117,6 @@ class CustomerHandlerViewModel(private val repository: CustomerRepository) : Vie
                     number2 = phone2Value.value.text,
                     email1 = email1Value.value.text,
                     email2 = email2Value.value.text,
-                    latitude = 0f,
-                    longitude = 0f
                 )
 
                 repository.insertCustomerAndAddress(
@@ -191,7 +189,11 @@ class CustomerHandlerViewModel(private val repository: CustomerRepository) : Vie
         documento2Value.update { TextFieldValue(text = customerReponse.value!!.estabelecimento.inscricoesEstadual[0].inscricao) }
         showCnpjApiDialog.update { false }
         razaoSocialValue.update { TextFieldValue(text = customerReponse.value!!.razaoSocial.uppercase()) }
-        nomeFantasiaValue.update { TextFieldValue(text = customerReponse.value!!.estabelecimento.nomeFantasia.uppercase()) }
+        nomeFantasiaValue.update {
+            TextFieldValue(
+                text = customerReponse.value!!.estabelecimento.nomeFantasia ?: ""
+            )
+        }
         zipCodeValue.update { TextFieldValue(text = customerReponse.value!!.estabelecimento.cep) }
         cityValue.update { TextFieldValue(text = FormatString.removeAcento(customerReponse.value!!.estabelecimento.cidade.nome)) }
         stateValue.update { TextFieldValue(text = customerReponse.value!!.estabelecimento.estado.sigla) }
@@ -310,7 +312,7 @@ class CustomerHandlerViewModel(private val repository: CustomerRepository) : Vie
         email2Value.update { value }
     }
 
-    fun updateCustomer(activity: Activity){
+    fun updateCustomer(activity: Activity) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (razaoSocialValue.value.text.isEmpty()) {

@@ -24,7 +24,7 @@ import androidx.room.PrimaryKey
     ]
 )
 data class Customers(
-    @ColumnInfo(name = "customer_id") @PrimaryKey(autoGenerate = true) val customerId: Long = 0,
+    @ColumnInfo(name = "customer_id") @PrimaryKey(autoGenerate = true) var customerId: Long = 0,
     @ColumnInfo(name = "enterprise_id") val enterpriseId: Long = 1L,
     @ColumnInfo(name = "partner_id") var partnerId: String? = null,
     @ColumnInfo(name = "firebase_id") val firebaseId: String? = null,

@@ -12,6 +12,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import br.lumago.solix.data.entities.relations.CustomerCard
 import br.lumago.solix.data.repositories.CustomerRepository
+import br.lumago.solix.exceptions.customer.CustomerSynchronizedException
 import br.lumago.solix.exceptions.customer.GetCustomerException
 import br.lumago.solix.ui.customerManipulator.CustomerManipulatorScreen
 import kotlinx.coroutines.FlowPreview
@@ -75,12 +76,24 @@ class CustomerViewModel(private val repository: CustomerRepository) : ViewModel(
     fun openEditCustomerScreen(
         activity: Activity,
         launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
-        customerId: Long,
-        isSynchronized: Boolean
+        customer: CustomerCard,
+        intentExtra: String?
     ) {
+        if (intentExtra != null) {
+            val resultCode = when (intentExtra) {
+                "customer" -> 1
+                else -> 2
+            }
+            activity.setResult(resultCode, Intent().apply {
+                putExtra("localCustomerId", customer.customerId)
+                putExtra("selectedCustomer", "${customer.partnerId} - ${customer.customerName}")
+            })
+            activity.finish()
+            return
+        }
         val activityEditCustomerScreen = Intent(activity, CustomerManipulatorScreen::class.java)
-        activityEditCustomerScreen.putExtra("customerId", customerId)
-        activityEditCustomerScreen.putExtra("isSynchronized", isSynchronized)
+        activityEditCustomerScreen.putExtra("customerId", customer.customerId)
+        activityEditCustomerScreen.putExtra("isSynchronized", customer.isSync)
         launcher.launch(activityEditCustomerScreen)
     }
 
@@ -140,7 +153,7 @@ class CustomerViewModel(private val repository: CustomerRepository) : ViewModel(
                 updateChooserDialog(false)
 
                 if (selectedCustomer.value!!.isSync) {
-                    throw Exception("")
+                    throw CustomerSynchronizedException("Não é possível excluir um cliente já sincronizado!")
                 }
                 repository.deleteCustomerById(selectedCustomer.value!!.customerId)
                 selectedCustomer.update { null }
