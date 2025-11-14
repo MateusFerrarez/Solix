@@ -39,6 +39,7 @@ import br.lumago.solix.ui.theme.corBotao
 import br.lumago.solix.ui.theme.corTexto
 import br.lumago.solix.ui.theme.titleStyle
 import br.lumago.solix.ui.utils.buttons.ActionButton
+import br.lumago.solix.ui.utils.buttons.DefaultButton
 import br.lumago.solix.ui.utils.components.Header
 import br.lumago.solix.ui.utils.dialogs.StatusDialog
 
@@ -90,28 +91,6 @@ fun NewCounterView(requestCamera: ActivityResultLauncher<String>?, viewModel: Ne
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    onClick = {
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = corBotao
-                    ),
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                ) {
-                    Text(
-                        text = "Total por produto",
-                        fontSize = 14.sp
-                    )
-                }
-            }
-
             Spacer(modifier = Modifier.height(15.dp))
 
             Row(
@@ -133,6 +112,17 @@ fun NewCounterView(requestCamera: ActivityResultLauncher<String>?, viewModel: Ne
                 items(count = itemList.size) { index ->
                     ItemCard(itemList[index])
                     Spacer(modifier = Modifier.height(10.dp))
+                }
+
+                item {
+                    if (itemList.isNotEmpty()){
+                        DefaultButton(
+                            onClick = {
+                                viewModel.saveCount(activity)
+                            },
+                            text = "Gravar contagem"
+                        )
+                    }
                 }
             }
         }

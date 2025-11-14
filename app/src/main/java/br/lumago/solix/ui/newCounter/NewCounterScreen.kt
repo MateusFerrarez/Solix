@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import br.lumago.solix.data.repositories.CountRepository
 import br.lumago.solix.data.repositories.ProductsRepository
 import br.lumago.solix.data.viewModels.newCounter.NewCounterViewModel
 import br.lumago.solix.ui.newCounter.components.NewCounterView
@@ -24,7 +25,8 @@ class NewCounterScreen : ComponentActivity() {
         val viewModel = ViewModelProvider(
             this,
             NewCounterViewModel.NewCounterViewModelFactory(
-                ProductsRepository(this)
+                ProductsRepository(this),
+                CountRepository(this)
             )
         )[NewCounterViewModel::class.java]
 

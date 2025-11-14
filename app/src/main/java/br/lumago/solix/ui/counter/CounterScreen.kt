@@ -14,6 +14,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import br.lumago.solix.data.repositories.CountRepository
+import br.lumago.solix.data.viewModels.count.CountViewModel
 import br.lumago.solix.ui.counter.components.CounterView
 
 
@@ -79,6 +82,7 @@ class CounterScreen : ComponentActivity() {
             }
         }
     }
+
     private fun showMessageOKCancel(
         message: String,
         okListener: DialogInterface.OnClickListener
@@ -90,15 +94,24 @@ class CounterScreen : ComponentActivity() {
             .create()
             .show()
     }
+
     private fun openAppSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
             data = Uri.fromParts("package", packageName, null)
         }
         startActivity(intent)
     }
+
     private fun openCamera() {
         setContent {
-            CounterView()
+            val viewModel = ViewModelProvider(
+                this,
+                CountViewModel.CountViewModelFactory(
+                    CountRepository(this)
+                )
+            )[CountViewModel::class.java]
+
+            CounterView(viewModel)
         }
     }
 }

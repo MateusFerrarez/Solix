@@ -85,7 +85,7 @@ class SyncViewModel : ViewModel() {
                 ),
                 currentSyncStatus
             )
-            handler.startSync(LocalDateTime.now().toString())
+            handler.startSync()
             delay(3500L)
             currentSyncStatus.update { SyncStatus.Loading("Leitura de produtos finalizada...") }
         } catch (e: Exception) {

@@ -97,7 +97,8 @@ fun SyncView(viewModel: SyncViewModel) {
             onClick = {
                 viewModel.startSync(activity)
             },
-            text = "Sincronizar"
+            text = "Sincronizar",
+            isEnable = currentProgress == SyncStatus.Wating
         )
     }
 }

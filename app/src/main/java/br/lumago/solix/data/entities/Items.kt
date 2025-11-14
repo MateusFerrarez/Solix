@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(
     tableName = "Items",
@@ -22,7 +23,10 @@ import androidx.room.PrimaryKey
 )
 data class Items(
     @ColumnInfo(name = "item_id") @PrimaryKey(autoGenerate = true) val itemId: Long = 0,
-    @ColumnInfo(name = "count_id") val countId: Long,
+    @ColumnInfo(name = "count_id") var countId: Long,
     @ColumnInfo(name = "product_id") val productId: Long,
-    @ColumnInfo(name = "created_at") val createdAt: String? = null
+    @ColumnInfo(
+        name = "created_at",
+        defaultValue = "CURRENT_TIMESTAMP"
+    ) val createdAt: String? = LocalDateTime.now().toString(),
 )

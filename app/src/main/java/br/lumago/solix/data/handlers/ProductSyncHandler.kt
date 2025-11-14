@@ -20,7 +20,7 @@ class ProductSyncHandler(
     val currentSyncStatus: MutableStateFlow<SyncStatus>
 ) {
 
-    suspend fun startSync(syncDate: String) {
+    suspend fun startSync() {
         val productJsonList = listOf(
             JSONObject(
                 """
