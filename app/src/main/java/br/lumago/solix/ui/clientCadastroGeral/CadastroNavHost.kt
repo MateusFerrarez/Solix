@@ -11,8 +11,9 @@ fun CadastroNavHost() {
 
     NavHost(
         navController = navController,
-        startDestination = "geral"
+        startDestination = "lista_clientes"
     ) {
+        composable("lista_clientes") { ListaDeClientesScreen(navController) }
         composable("geral") { CadastroGeralScreen(navController) }
         composable("endereco") { CadastroEnderecoScreen(navController) }
         composable("contato") { CadastroContatoScreen(navController) }
