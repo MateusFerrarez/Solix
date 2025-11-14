@@ -5,6 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
 import br.lumago.solix.data.viewModels.LoginViewModel
+import br.lumago.solix.ui.clientCadastroGeral.CadastroGeralView
+import br.lumago.solix.ui.clientCadastroGeral.CadastroNavHost
+import br.lumago.solix.ui.home.HomeScreen
+import br.lumago.solix.ui.home.components.Home
 import br.lumago.solix.ui.login.components.LoginView
 
 class LoginScreen : ComponentActivity() {
@@ -16,7 +20,8 @@ class LoginScreen : ComponentActivity() {
         )[LoginViewModel::class]
 
         setContent {
-            LoginView(loginViewModel)
+           //LoginView(loginViewModel)
+            CadastroNavHost()
         }
     }
 }
